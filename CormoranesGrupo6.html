@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Cormoranes</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alonso, Carolina y Miriam" />
+    <link href="07PresentacionCormoranes2001_files/remark-css-0.0.1/chocolate-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Cormoranes
+## Grupo 6
+### Alonso, Carolina y Miriam
+### 2021/02/01
+
+---
+
+class: center, middle
+
+# Biologging en cormoranes
+
+---
+class: center, middle
+
+# Antescendentes
+
+Tenemos datos de cormoranes de una isla en Peru.  
+
+![](3Results/Cormoranes.jpg)
+
+&lt;img src="https://2.bp.blogspot.com/-_9xil655VE8/Wkcr9pX-oXI/AAAAAAAACRw/7VNGt__HfkIxC5GqJA1WPyzs21isHt2OwCLcBGAs/s1600/DSC_7304.JPG", width="200", heigth="100"&gt;
+
+--
+
+1. Se muestrearon antes de la temporada de pesca (Apr) y despues (Jul).     
+
+--
+
+2. Se muestrearon hembras y machos.  
+
+---
+class: center, middle
+
+# Justificacion
+
+Conocer si hay diferencias entre sexos en las areas y profundidades que utilizan para alimentarse nos ayuda a mejorar medidas de proteccion de la especie. Asi como tener informacion de que sexo puede ser mas vulnerable a la temporada de pesca. Por ejemplo, si un sexo depende de especies que se encuentren en areas especificas o a profundidades especificas que sean mas afectadas por la pesca y como mitigar el impacto.
+
+---
+class: center, middle
+# Objetivos
+
+Queremos saber:   
+- Si las hembras bucean mas profundo o viajan mas lejos que los machos  
+
+--
+
+- Si los cormoranes bucean mas profundo o viajan mas lejos en Julio comparado con Abril.
+
+---
+
+# Metodologia
+
+Primero importamos los excels de la carpeta.
+
+Usando estos paquetes:
+
+```r
+library(here)
+library(readxl)
+```
+
+Siguiendo este codigo:
+
+```r
+MainFolder&lt;-here()
+DataFolder&lt;-paste0(MainFolder,'//0Excels')
+files_Cormorant &lt;- list.files(DataFolder,
+                              pattern="*.xlsx", 
+                              full.names=TRUE)
+List_Cormoranes &lt;- lapply(files_Cormorant, 
+                          read_excel)
+TracksCormoranes &lt;- do.call("rbind", 
+                            List_Cormoranes)
+```
+
+---
+
+## Unir tablas
+
+Quitamos los NA's
+
+```r
+TracksCormoranes &lt;- TracksCormoranes[complete.cases(TracksCormoranes$Latitude),]
+```
+
+Queda asi
+
+
+
+```r
+str(Tracks)
+```
+
+```
+## tibble [1,185,421 x 9] (S3: tbl_df/tbl/data.frame)
+##  $ TagID      : chr [1:1185421] "AD01" "AD01" "AD01" "AD01" ...
+##  $ Date       : POSIXct[1:1185421], format: "2017-04-01" "2017-04-01" ...
+##  $ Time       : POSIXct[1:1185421], format: "1899-12-31 13:28:15" "1899-12-31 13:38:06" ...
+##  $ Depth      : num [1:1185421] 0 0 0 0 0 0 0 0 0 0 ...
+##  $ Temperature: num [1:1185421] 23.3 28.2 28.2 28.2 28.2 28.2 28.1 28.1 28.1 28.1 ...
+##  $ Latitude   : num [1:1185421] -6.95 -6.95 -6.95 -6.95 -6.95 ...
+##  $ Longitude  : num [1:1185421] -80.7 -80.7 -80.7 -80.7 -80.7 ...
+##  $ Height     : num [1:1185421] NA 42 26 20 24 20 20 22 22 22 ...
+##  $ Speed      : num [1:1185421] NA 33.3 33.3 33.3 33.3 33.3 33.3 37 33.3 33.3 ...
+```
+
+---
+
+## Area de estudio
+Usando estos paquetes
+
+
+Extraer cordenadas de la colonia
+
+```r
+MiColonia &lt;- Tracks %&gt;% 
+  summarise(Longitude = first(Longitude),Latitude  = first(Latitude), )
+```
+
+y graficar area de estudio
+
+```r
+world &lt;- ne_countries(scale = "medium", returnclass = "sf")
+PlotAreadeEstudio&lt;-ggplot()+
+    geom_sf(data = world) +
+    coord_sf(xlim = c(-85, -65), ylim = c(-30, 0), expand = FALSE)+
+    geom_point(data = MiColonia, aes(x = Longitude, y = Latitude), 
+               color = "black",fill="white",
+               size = 5,shape=21,stroke = 3)+
+  geom_text(aes(x=-75,y=-10),label = "PERU", size=5)+
+  theme_bw()
+```
+
+---
+
+```r
+PlotAreadeEstudio
+```
+
+![](07PresentacionCormoranes2001_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+---
+## Grafico preliminar
+
+Ver tracks
+
+```r
+PlotTracks&lt;-ggplot()+
+    geom_sf(data = world) +
+    coord_sf(xlim = c(-81.5, -79.5), ylim = c(-7.6, -6.6), expand = FALSE)+
+    geom_point(data = MiColonia, aes(x = Longitude, y = Latitude), 
+               color = "black",fill="white",
+               size = 5,shape=21,stroke = 3)+
+  geom_text(aes(x=-79.8,y=-6.8),label = "PERU", size=8)+
+  geom_path(data = Tracks, aes(x = Longitude, y = Latitude, color=TagID))+
+  geom_point(data = MiColonia,mapping = aes(x = Longitude, y = Latitude), 
+             color = "black",fill="white", size = 5,shape=19, stroke = 3)+
+  theme_bw()+
+  theme(panel.border = element_rect(linetype = "solid", 
+                                    colour = "black", size=1.5), 
+        axis.title = element_blank(),
+        axis.ticks.length = unit(3, "pt"),
+        axis.text.x =  element_text(size=18),
+        axis.text.y =  element_text(size=18),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        legend.position = "none") +
+   labs(x = "Longitude", y="Latitude")+
+   ggtitle('Tracks de todos los individuos')
+```
+
+---
+
+## Grafico preliminar
+Con el codigo anterior, generamos esto:
+
+```r
+PlotTracks
+```
+
+![](07PresentacionCormoranes2001_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+---
+
+##  Calcular maximos de distancia de la colonia por individuo
+
+Paquetes
+
+```r
+library(geosphere) #distm
+library(rgeos) #coordinates
+```
+
+Transformamos a datos espaciales
+- Los tracks:
+
+```r
+TracksSp&lt;-Tracks
+TracksSp$lat&lt;-TracksSp$Latitude
+TracksSp$lon&lt;-TracksSp$Longitude
+coordinates(TracksSp)&lt;-~lon+lat
+```
+
+- y la colonia:
+
+```r
+LaColonia&lt;- SpatialPoints(cbind(MiColonia$Longitude,MiColonia$Latitude)) 
+```
+
+---
+
+### Distancias en metros
+
+Calculamos distancia en metros y transformamos a kilometros
+
+```r
+Metros&lt;-(distm(TracksSp,MiColonia,fun = distHaversine))
+TracksDist&lt;-cbind(Tracks,Metros)
+TracksDist$Km&lt;-TracksDist$Metros/1000
+```
+
+
+```r
+head(TracksDist)
+```
+
+```
+##   TagID       Date                Time Depth Temperature Latitude Longitude
+## 1  AD01 2017-04-01 1899-12-31 13:28:15     0        23.3 -6.94793 -80.72884
+## 2  AD01 2017-04-01 1899-12-31 13:38:06     0        28.2 -6.94793 -80.72884
+## 3  AD01 2017-04-01 1899-12-31 13:38:07     0        28.2 -6.94798 -80.72881
+## 4  AD01 2017-04-01 1899-12-31 13:38:08     0        28.2 -6.94806 -80.72876
+## 5  AD01 2017-04-01 1899-12-31 13:38:09     0        28.2 -6.94813 -80.72870
+## 6  AD01 2017-04-01 1899-12-31 13:38:10     0        28.2 -6.94821 -80.72864
+##   Height Speed    Metros          Km
+## 1     NA    NA  0.000000 0.000000000
+## 2     42  33.3  0.000000 0.000000000
+## 3     26  33.3  6.478402 0.006478402
+## 4     20  33.3 16.957999 0.016957999
+## 5     24  33.3 27.111081 0.027111081
+## 6     20  33.3 38.209457 0.038209457
+```
+
+---
+
+### Calculamos distancias por individuos.
+
+Queremos saber la distancia maxima de cada individuo
+
+```r
+DistanciaColonia&lt;-TracksDist %&gt;%
+  group_by(TagID) %&gt;%
+   summarise_at(c("Km"), max, na.rm = TRUE) 
+```
+
+
+```r
+(DistanciaColonia)
+```
+
+```
+## # A tibble: 20 x 2
+##    TagID    Km
+##    &lt;chr&gt; &lt;dbl&gt;
+##  1 AD01   20.9
+##  2 AD02   18.5
+##  3 AD03   18.3
+##  4 AD04   14.7
+##  5 AD05   23.0
+##  6 AD06   19.2
+##  7 AD07   18.0
+##  8 AD08   17.3
+##  9 AD09   26.3
+## 10 AD10   13.7
+## 11 AD11   45.2
+## 12 AD12   57.2
+## 13 AD13   47.2
+## 14 AD15   94.1
+## 15 AD16   47.6
+## 16 AD17   42.1
+## 17 AD18   47.6
+## 18 AD19   21.2
+## 19 AD20   22.8
+## 20 AD71   49.5
+```
+
+---
+
+### Maximos de buceo por individuo
+
+
+```r
+Tracks$Depth&lt;-as.numeric(Tracks$Depth) 
+```
+
+
+```r
+ProfundidadBuceos&lt;-Tracks %&gt;%
+  group_by(TagID) %&gt;%
+   summarise_at(c("Depth"), max, na.rm = TRUE) 
+```
+
+
+```r
+(ProfundidadBuceos)
+```
+
+```
+## # A tibble: 20 x 2
+##    TagID  Depth
+##    &lt;chr&gt;  &lt;dbl&gt;
+##  1 AD01   5.67 
+##  2 AD02   0    
+##  3 AD03   5.87 
+##  4 AD04   0.280
+##  5 AD05   8.83 
+##  6 AD06   0    
+##  7 AD07   9.26 
+##  8 AD08   9.58 
+##  9 AD09  10.4  
+## 10 AD10   6.51 
+## 11 AD11  23.4  
+## 12 AD12  27.1  
+## 13 AD13  21.9  
+## 14 AD15  19.0  
+## 15 AD16  35.6  
+## 16 AD17  16.5  
+## 17 AD18  27.9  
+## 18 AD19  22.5  
+## 19 AD20  23.9  
+## 20 AD71  27.6
+```
+
+---
+
+## Crear tabla
+
+Importar datos de medidas
+
+```r
+Medidas&lt;-read_excel(here("./1Datos/Data_cormorantX.xlsx"))
+colnames(Medidas)[1]&lt;-'TagID'
+```
+
+Unir medidas con distancias maximas y profundidades de buceo
+
+```r
+TablaDistancias&lt;-left_join(Medidas,DistanciaColonia,by='TagID')
+TablaCompleta&lt;-left_join(TablaDistancias,ProfundidadBuceos,by='TagID')
+```
+
+Tabla completa:
+
+```r
+head(TablaCompleta)
+```
+
+```
+## # A tibble: 6 x 8
+##   TagID  Year Month Sex   Weight  Wing    Km Depth
+##   &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 AD01   2017 Apr   M      2399.  35    20.9 5.67 
+## 2 AD02   2017 Apr   M      2392.  35.2  18.5 0    
+## 3 AD03   2017 Apr   F      2450.  35.5  18.3 5.87 
+## 4 AD04   2017 Apr   F      2609.  34.8  14.7 0.280
+## 5 AD05   2017 Apr   F      2664   36    23.0 8.83 
+## 6 AD06   2017 Apr   M      2278.  34.6  19.2 0
+```
+
+
+---
+
+# Resultados
+
+### Promedios de profundidades maximas de buceo
+
+
+```r
+TablaCompleta %&gt;%
+  group_by(Sex,Month) %&gt;%
+  summarise_at(c("Depth"), funs(mean, sd), na.rm = TRUE) 
+```
+
+```
+## # A tibble: 4 x 4
+## # Groups:   Sex [2]
+##   Sex   Month  mean    sd
+##   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 F     Apr    6.21  3.66
+## 2 F     Jul   27.5   5.87
+## 3 M     Apr    5.06  4.93
+## 4 M     Jul   21.6   4.07
+```
+
+---
+
+
+```r
+PlotBuceos&lt;-ggplot(TablaCompleta, aes(x=Month, y=Depth,fill=Sex))+
+  xlab("Veda")+ylab("Profundidad de buceo maxima \n (m)")+
+  geom_boxplot()+
+    scale_fill_manual(values=c("#f4a261","#2a9d8f","#f4a261","#2a9d8f")) +
+  theme_classic()+
+  theme(axis.text.x =  element_text(size=12),
+        axis.title.x = element_text(size=12),
+        axis.text.y =  element_text(size=12),
+        axis.title.y = element_text(size=12),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        legend.position = "top")
+```
+
+---
+
+
+```r
+PlotBuceos
+```
+
+![](07PresentacionCormoranes2001_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+
+
+---
+
+### Promedios de distancia maxima de la colonia
+
+```r
+TablaCompleta %&gt;%
+  group_by(Sex,Month) %&gt;%
+  summarise_at(c("Km"), funs(mean, sd), na.rm = TRUE) 
+```
+
+```
+## # A tibble: 4 x 4
+## # Groups:   Sex [2]
+##   Sex   Month  mean    sd
+##   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 F     Apr    17.4  3.66
+## 2 F     Jul    34.8 14.8 
+## 3 M     Apr    20.6  3.39
+## 4 M     Jul    57.2 21.4
+```
+
+---
+
+```r
+PlotDistancias&lt;-ggplot(TablaCompleta, aes(x=Month, y=Km,fill=Sex))+
+  geom_boxplot()+
+  xlab("Veda")+ylab("Distancia de la colonia \n (m)")+
+  geom_boxplot()+
+    scale_fill_manual(values=c("#f4a261","#2a9d8f","#f4a261","#2a9d8f")) +
+  theme_classic()+
+  theme(axis.text.x =  element_text(size=12),
+        axis.title.x = element_text(size=12),
+        axis.text.y =  element_text(size=12),
+        axis.title.y = element_text(size=12),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        legend.position = "top")
+```
+
+---
+
+
+```r
+PlotDistancias
+```
+
+![](07PresentacionCormoranes2001_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+
+---
+
+## Estadisticos
+
+- Si las hembras bucean mas profundo o viajan mas lejos que los machos  
+- Si los cormoranes bucean mas profundo o viajan mas lejos en Julio comparado con Abril.
+
+.pull-rigth[
+Variables a probar: profundidad del buceo y distancia maxima
+Factores: Sexo y Meses (temporadas de pesca).
+Random factor: ID (pero como solo tenemos un dato por individuo, no lo vamos a usar), regularmente hay  mas de un viaje por individuo. Entonces no necesitamos un modelo mixto.
+]
+
+.pull-left[
+
+```r
+str(TablaCompleta)
+```
+
+```
+## tibble [20 x 8] (S3: tbl_df/tbl/data.frame)
+##  $ TagID : chr [1:20] "AD01" "AD02" "AD03" "AD04" ...
+##  $ Year  : num [1:20] 2017 2017 2017 2017 2017 ...
+##  $ Month : chr [1:20] "Apr" "Apr" "Apr" "Apr" ...
+##  $ Sex   : chr [1:20] "M" "M" "F" "F" ...
+##  $ Weight: num [1:20] 2399 2392 2450 2609 2664 ...
+##  $ Wing  : num [1:20] 35 35.2 35.5 34.8 36 34.6 35.1 36 36.1 36.8 ...
+##  $ Km    : num [1:20] 20.9 18.5 18.3 14.7 23 ...
+##  $ Depth : num [1:20] 5.67 0 5.87 0.28 8.83 ...
+```
+]
+
+---
+
+### Supuestos
+
+.pull-right[
+Normalidad
+
+```r
+shapiro.test(TablaCompleta$Depth) #mayor a 0.05 
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  TablaCompleta$Depth
+## W = 0.93846, p-value = 0.2473
+```
+Homogeneidad de las varianzas
+
+```r
+bartlett.test(Depth~Sex, data=TablaCompleta)
+```
+
+```
+## 
+## 	Bartlett test of homogeneity of variances
+## 
+## data:  Depth by Sex
+## Bartlett's K-squared = 0.37932, df = 1, p-value = 0.538
+```
+]
+
+---
+
+### Anovas de dos vias
+
+.pull-left[
+
+```r
+modeloD&lt;-lm(formula=Depth~Sex*Month,data=TablaCompleta)
+summary(modeloD)
+```
+
+```
+## 
+## Call:
+## lm(formula = Depth ~ Sex * Month, data = TablaCompleta)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.9340 -4.2827  0.3103  2.9910  8.0955 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)      6.214      2.068   3.005  0.00888 ** 
+## SexM            -1.158      2.924  -0.396  0.69768    
+## MonthJul        21.260      3.102   6.855 5.46e-06 ***
+## SexM:MonthJul   -4.744      4.263  -1.113  0.28325    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4.624 on 15 degrees of freedom
+##   (1 observation deleted due to missingness)
+## Multiple R-squared:  0.8423,	Adjusted R-squared:  0.8107 
+## F-statistic:  26.7 on 3 and 15 DF,  p-value: 2.899e-06
+```
+
+---
+
+Resultados del modelo
+
+```r
+anova(modeloD)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: Depth
+##           Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Sex        1   26.14   26.14  1.2226    0.2863    
+## Month      1 1659.85 1659.85 77.6455 2.569e-07 ***
+## Sex:Month  1   26.48   26.48  1.2387    0.2832    
+## Residuals 15  320.66   21.38                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+]
+
+.pull-right[
+El tiempo de muestreo es significativo, independientemente del sexo, ambos sexos bucean mas profundo despues de la veda.
+]
+
+
+---
+
+### Anovas de dos vias
+
+.pull-left[
+
+```r
+modeloKm&lt;-lm(formula=Km~Sex*Month,data=TablaCompleta)
+summary(modeloKm)
+```
+
+```
+## 
+## Call:
+## lm(formula = Km ~ Sex * Month, data = TablaCompleta)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -15.018  -6.853  -1.351   3.257  36.921 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)     17.402      5.872   2.964  0.00966 **
+## SexM             3.189      8.304   0.384  0.70636   
+## MonthJul        17.398      8.807   1.975  0.06692 . 
+## SexM:MonthJul   19.167     12.105   1.583  0.13417   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 13.13 on 15 degrees of freedom
+##   (1 observation deleted due to missingness)
+## Multiple R-squared:  0.655,	Adjusted R-squared:  0.586 
+## F-statistic: 9.493 on 3 and 15 DF,  p-value: 0.0009233
+```
+
+---
+
+Resultados del modelo
+
+
+```r
+anova(modeloKm)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: Km
+##           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Sex        1  894.1   894.1  5.1868 0.0378349 *  
+## Month      1 3583.0  3583.0 20.7855 0.0003763 ***
+## Sex:Month  1  432.2   432.2  2.5073 0.1341737    
+## Residuals 15 2585.7   172.4                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+]
+
+.pull-right[
+El tiempo de muestreo es **marginalmente** significativo, independientemente del sexo, ambos sexos viajan mas lejos despues de la veda.
+]
+
+
+
+---
+
+## Mapas
+
+Funcion
+
+```r
+Ploteame&lt;-function(Datos=Datos){
+  MiPlot&lt;-ggplot()+
+    geom_sf(data = world) +
+    coord_sf(xlim = c(-81, -80), ylim = c(-7.5, -6.5), expand = FALSE)+
+    geom_path(data = Datos, aes(x = Longitude, y = Latitude, color=TagID), size=1)+
+  theme_bw()+
+  theme(panel.border = element_rect(linetype = "solid", colour = "black", size=1.5),
+        axis.title = element_text(size=8),
+        axis.ticks.length = unit(3, "pt"),
+        axis.text.x =  element_text(size=8),
+        axis.text.y =  element_text(size=8),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        legend.title = element_text(size=8),
+        legend.text = element_text(size=8),
+        panel.background = element_rect(fill = "white"),
+        legend.justification=c(0,0), 
+        legend.position='top') + #c(0.65,0.65)
+   labs(x = "Longitude", y="Latitude")+
+   geom_point(data = MiColonia, 
+             mapping = aes(x = Longitude, y = Latitude), 
+             color = "black",
+             fill="white", 
+             size = 5,shape=21,stroke = 3)
+  return(MiPlot)
+}
+```
+
+---
+
+Agregar medidas a Tracks
+
+```r
+TracksC&lt;-left_join(Tracks,Medidas,by='TagID')
+```
+
+Creamos mapas por sexo y etapa (usando la funcion de 'Ploteame') 
+
+```r
+FA&lt;-subset(TracksC,TracksC$Sex=='F' &amp; TracksC$Month=='Apr')
+MapaA&lt;-Ploteame(Datos=FA)+
+  ggtitle('Hembras durante de la veda (Abr)')
+```
+
+
+```r
+FD&lt;-subset(TracksC,TracksC$Sex=='F' &amp; TracksC$Month=='Jul')
+MapaB&lt;-Ploteame(Datos=FD)+
+  ggtitle('Hembras despues de la veda (Jul)')
+```
+
+
+```r
+MA&lt;-subset(TracksC,TracksC$Sex=='M' &amp; TracksC$Month=='Apr')
+MapaC&lt;-Ploteame(Datos=MA)+
+  ggtitle('Machos antes de la veda (Apr)')
+```
+
+
+```r
+MD&lt;-subset(TracksC,TracksC$Sex=='M' &amp; TracksC$Month=='Jul')
+MapaD&lt;-Ploteame(Datos=MD)+
+  ggtitle('Machos despues de la veda (Jul)')
+```
+
+---
+
+Paquete
+
+```r
+library(cowplot)
+```
+
+Unir plot
+
+```r
+MapasSexoVeda&lt;-plot_grid(MapaA,MapaB,
+                         MapaC,MapaD,ncol = 2, nrow=2)
+```
+
+---
+
+# Tracks separados por sexo y veda
+![](07PresentacionCormoranes2001_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
+
+
+---
+
+# Conclusiones
+- Las hembras bucean mas profundo o viajan mas lejos que los machos?
+- Los cormoranes bucean mas profundo o viajan mas lejos en Julio comparado con Abril?
+
+
+Estos analisis preliminares sugieren que **no** hay diferencias significativas entre hembras y machos pero **si hay diferencias** entre antes y despues de la veda.
+
+
+***Son solo maximos, no hicimos correccion de ceros ni calculamos promedios por individuo***
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
