@@ -4,7 +4,8 @@
     <title>Cormoranes</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alonso, Carolina y Miriam" />
-    <link href="07PresentacionCormoranes2001_files/remark-css-0.0.1/chocolate-fonts.css" rel="stylesheet" />
+    <link href="CormoranesGrupo6_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="CormoranesGrupo6_files/remark-css-0.0.1/chocolate-fonts.css" rel="stylesheet" />
   </head>
   <body>
     <textarea id="source">
@@ -24,13 +25,13 @@ class: center, middle
 ---
 class: center, middle
 
-# Antescendentes
+# Antecedentes
 
 Tenemos datos de cormoranes de una isla en Peru.  
 
 ![](3Results/Cormoranes.jpg)
 
-&lt;img src="https://2.bp.blogspot.com/-_9xil655VE8/Wkcr9pX-oXI/AAAAAAAACRw/7VNGt__HfkIxC5GqJA1WPyzs21isHt2OwCLcBGAs/s1600/DSC_7304.JPG", width="200", heigth="100"&gt;
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/Cormoran.JPG", width="200", heigth="100"&gt;
 
 --
 
@@ -45,7 +46,10 @@ class: center, middle
 
 # Justificacion
 
-Conocer si hay diferencias entre sexos en las areas y profundidades que utilizan para alimentarse nos ayuda a mejorar medidas de proteccion de la especie. Asi como tener informacion de que sexo puede ser mas vulnerable a la temporada de pesca. Por ejemplo, si un sexo depende de especies que se encuentren en areas especificas o a profundidades especificas que sean mas afectadas por la pesca y como mitigar el impacto.
+- Conocer si hay diferencias entre sexos en las areas y profundidades que utilizan para alimentarse nos ayuda a mejorar medidas de proteccion de la especie. 
+--
+
+- Asi como tener informacion de que sexo puede ser mas vulnerable a la temporada de pesca. 
 
 ---
 class: center, middle
@@ -104,16 +108,16 @@ str(Tracks)
 ```
 
 ```
-## tibble [1,185,421 x 9] (S3: tbl_df/tbl/data.frame)
-##  $ TagID      : chr [1:1185421] "AD01" "AD01" "AD01" "AD01" ...
-##  $ Date       : POSIXct[1:1185421], format: "2017-04-01" "2017-04-01" ...
-##  $ Time       : POSIXct[1:1185421], format: "1899-12-31 13:28:15" "1899-12-31 13:38:06" ...
-##  $ Depth      : num [1:1185421] 0 0 0 0 0 0 0 0 0 0 ...
-##  $ Temperature: num [1:1185421] 23.3 28.2 28.2 28.2 28.2 28.2 28.1 28.1 28.1 28.1 ...
-##  $ Latitude   : num [1:1185421] -6.95 -6.95 -6.95 -6.95 -6.95 ...
-##  $ Longitude  : num [1:1185421] -80.7 -80.7 -80.7 -80.7 -80.7 ...
-##  $ Height     : num [1:1185421] NA 42 26 20 24 20 20 22 22 22 ...
-##  $ Speed      : num [1:1185421] NA 33.3 33.3 33.3 33.3 33.3 33.3 37 33.3 33.3 ...
+tibble [1,185,421 x 9] (S3: tbl_df/tbl/data.frame)
+ $ TagID      : chr [1:1185421] "AD01" "AD01" "AD01" "AD01" ...
+ $ Date       : POSIXct[1:1185421], format: "2017-04-01" "2017-04-01" ...
+ $ Time       : POSIXct[1:1185421], format: "1899-12-31 13:28:15" "1899-12-31 13:38:06" ...
+ $ Depth      : num [1:1185421] 0 0 0 0 0 0 0 0 0 0 ...
+ $ Temperature: num [1:1185421] 23.3 28.2 28.2 28.2 28.2 28.2 28.1 28.1 28.1 28.1 ...
+ $ Latitude   : num [1:1185421] -6.95 -6.95 -6.95 -6.95 -6.95 ...
+ $ Longitude  : num [1:1185421] -80.7 -80.7 -80.7 -80.7 -80.7 ...
+ $ Height     : num [1:1185421] NA 42 26 20 24 20 20 22 22 22 ...
+ $ Speed      : num [1:1185421] NA 33.3 33.3 33.3 33.3 33.3 33.3 37 33.3 33.3 ...
 ```
 
 ---
@@ -145,11 +149,13 @@ PlotAreadeEstudio&lt;-ggplot()+
 
 ---
 
-```r
-PlotAreadeEstudio
-```
+class: center
 
-![](07PresentacionCormoranes2001_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+
+
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotAreadeEstudio.jpg" width="400" height="600" /&gt;
+
 
 ---
 ## Grafico preliminar
@@ -187,11 +193,10 @@ PlotTracks&lt;-ggplot()+
 ## Grafico preliminar
 Con el codigo anterior, generamos esto:
 
-```r
-PlotTracks
-```
 
-![](07PresentacionCormoranes2001_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotTracks.jpg" width="600" height="400" /&gt;
+
+
 
 ---
 
@@ -268,33 +273,21 @@ DistanciaColonia&lt;-TracksDist %&gt;%
 
 
 ```r
-(DistanciaColonia)
+head(DistanciaColonia,8)
 ```
 
 ```
-## # A tibble: 20 x 2
-##    TagID    Km
-##    &lt;chr&gt; &lt;dbl&gt;
-##  1 AD01   20.9
-##  2 AD02   18.5
-##  3 AD03   18.3
-##  4 AD04   14.7
-##  5 AD05   23.0
-##  6 AD06   19.2
-##  7 AD07   18.0
-##  8 AD08   17.3
-##  9 AD09   26.3
-## 10 AD10   13.7
-## 11 AD11   45.2
-## 12 AD12   57.2
-## 13 AD13   47.2
-## 14 AD15   94.1
-## 15 AD16   47.6
-## 16 AD17   42.1
-## 17 AD18   47.6
-## 18 AD19   21.2
-## 19 AD20   22.8
-## 20 AD71   49.5
+## # A tibble: 8 x 2
+##   TagID    Km
+##   &lt;chr&gt; &lt;dbl&gt;
+## 1 AD01   20.9
+## 2 AD02   18.5
+## 3 AD03   18.3
+## 4 AD04   14.7
+## 5 AD05   23.0
+## 6 AD06   19.2
+## 7 AD07   18.0
+## 8 AD08   17.3
 ```
 
 ---
@@ -315,33 +308,21 @@ ProfundidadBuceos&lt;-Tracks %&gt;%
 
 
 ```r
-(ProfundidadBuceos)
+head(ProfundidadBuceos,8)
 ```
 
 ```
-## # A tibble: 20 x 2
-##    TagID  Depth
-##    &lt;chr&gt;  &lt;dbl&gt;
-##  1 AD01   5.67 
-##  2 AD02   0    
-##  3 AD03   5.87 
-##  4 AD04   0.280
-##  5 AD05   8.83 
-##  6 AD06   0    
-##  7 AD07   9.26 
-##  8 AD08   9.58 
-##  9 AD09  10.4  
-## 10 AD10   6.51 
-## 11 AD11  23.4  
-## 12 AD12  27.1  
-## 13 AD13  21.9  
-## 14 AD15  19.0  
-## 15 AD16  35.6  
-## 16 AD17  16.5  
-## 17 AD18  27.9  
-## 18 AD19  22.5  
-## 19 AD20  23.9  
-## 20 AD71  27.6
+## # A tibble: 8 x 2
+##   TagID Depth
+##   &lt;chr&gt; &lt;dbl&gt;
+## 1 AD01  5.67 
+## 2 AD02  0    
+## 3 AD03  5.87 
+## 4 AD04  0.280
+## 5 AD05  8.83 
+## 6 AD06  0    
+## 7 AD07  9.26 
+## 8 AD08  9.58
 ```
 
 ---
@@ -407,6 +388,8 @@ TablaCompleta %&gt;%
 
 ---
 
+Codigo para figura
+
 
 ```r
 PlotBuceos&lt;-ggplot(TablaCompleta, aes(x=Month, y=Depth,fill=Sex))+
@@ -426,13 +409,10 @@ PlotBuceos&lt;-ggplot(TablaCompleta, aes(x=Month, y=Depth,fill=Sex))+
 
 ---
 
+## Figura 
 
-```r
-PlotBuceos
-```
 
-![](07PresentacionCormoranes2001_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
-
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotBuceos.jpg" width="600" height="400" /&gt;
 
 ---
 
@@ -477,26 +457,18 @@ PlotDistancias&lt;-ggplot(TablaCompleta, aes(x=Month, y=Km,fill=Sex))+
 ---
 
 
-```r
-PlotDistancias
-```
 
-![](07PresentacionCormoranes2001_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotDistancias.jpg" width="600" height="400" /&gt;
 
 ---
 
 ## Estadisticos
 
-- Si las hembras bucean mas profundo o viajan mas lejos que los machos  
-- Si los cormoranes bucean mas profundo o viajan mas lejos en Julio comparado con Abril.
 
-.pull-rigth[
 Variables a probar: profundidad del buceo y distancia maxima
 Factores: Sexo y Meses (temporadas de pesca).
-Random factor: ID (pero como solo tenemos un dato por individuo, no lo vamos a usar), regularmente hay  mas de un viaje por individuo. Entonces no necesitamos un modelo mixto.
-]
 
-.pull-left[
+
 
 ```r
 str(TablaCompleta)
@@ -513,174 +485,195 @@ str(TablaCompleta)
 ##  $ Km    : num [1:20] 20.9 18.5 18.3 14.7 23 ...
 ##  $ Depth : num [1:20] 5.67 0 5.87 0.28 8.83 ...
 ```
-]
+
+---
+
+# Anovas de dos vias
+
+De acuerdo a nuestros objetivos lo mejor es usar una ANOVA de dos dias.
+Para evaluar el efecto de dos variables (sexo y veda) en una variable de respuesta (maximo de buceos y distancia maxima de los viajes, respectivamente). 
+
+Hipotesis a probar.
+1. No hay diferencias en medias de Sexo
+2. No hay diferencias en medias de Veda
+3. No hay interaccion entre Sexo y Veda.
+
+Factores: Sexo, Veda
+
+Nuestras muestras estan balanceadas:
+ 
+
+```r
+table(TablaCompleta$Month,TablaCompleta$Sex)
+```
+
+```
+##      
+##       F M
+##   Apr 5 5
+##   Jul 5 5
+```
+
+---
+
+## Profundidad de buceo
+
+```r
+modeloD&lt;-aov(formula=Depth~Sex+Month,data=TablaCompleta)
+summary(modeloD)
+```
+
+```
+##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## Sex          1   26.1    26.1   1.205    0.289    
+## Month        1 1659.9  1659.9  76.504 1.71e-07 ***
+## Residuals   16  347.1    21.7                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 1 observation deleted due to missingness
+```
+
+
+Con la interaccion
+
+```r
+Mis_interacciones&lt;-aov(Depth~Sex+Month+Sex:Month, data=TablaCompleta)
+summary(Mis_interacciones)
+```
+
+```
+##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## Sex          1   26.1    26.1   1.223    0.286    
+## Month        1 1659.9  1659.9  77.646 2.57e-07 ***
+## Sex:Month    1   26.5    26.5   1.239    0.283    
+## Residuals   15  320.7    21.4                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 1 observation deleted due to missingness
+```
+
+
+El tiempo de muestreo es significativo, independientemente del sexo.
 
 ---
 
 ### Supuestos
 
-.pull-right[
-Normalidad
+Homogeneidad de las varianzas y normalidad
+
+
 
 ```r
-shapiro.test(TablaCompleta$Depth) #mayor a 0.05 
+leveneTest(Depth~Sex:Month, data=TablaCompleta)
+```
+
+```
+## Levene's Test for Homogeneity of Variance (center = median)
+##       Df F value Pr(&gt;F)
+## group  3  0.4533 0.7188
+##       15
+```
+
+```r
+aov_residuals &lt;- residuals(object = Mis_interacciones)
+shapiro.test(x = aov_residuals )
 ```
 
 ```
 ## 
 ## 	Shapiro-Wilk normality test
 ## 
-## data:  TablaCompleta$Depth
-## W = 0.93846, p-value = 0.2473
+## data:  aov_residuals
+## W = 0.93973, p-value = 0.2607
 ```
-Homogeneidad de las varianzas
+
+
 
 ```r
-bartlett.test(Depth~Sex, data=TablaCompleta)
+plot(Mis_interacciones,1)
 ```
 
+![](CormoranesGrupo6_files/figure-html/normalidad-1.png)&lt;!-- --&gt;
+
+```r
+plot(Mis_interacciones,2)
 ```
-## 
-## 	Bartlett test of homogeneity of variances
-## 
-## data:  Depth by Sex
-## Bartlett's K-squared = 0.37932, df = 1, p-value = 0.538
-```
-]
+
+![](CormoranesGrupo6_files/figure-html/normalidad-2.png)&lt;!-- --&gt;
 
 ---
 
 ### Anovas de dos vias
 
-.pull-left[
 
 ```r
-modeloD&lt;-lm(formula=Depth~Sex*Month,data=TablaCompleta)
-summary(modeloD)
-```
-
-```
-## 
-## Call:
-## lm(formula = Depth ~ Sex * Month, data = TablaCompleta)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -5.9340 -4.2827  0.3103  2.9910  8.0955 
-## 
-## Coefficients:
-##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)      6.214      2.068   3.005  0.00888 ** 
-## SexM            -1.158      2.924  -0.396  0.69768    
-## MonthJul        21.260      3.102   6.855 5.46e-06 ***
-## SexM:MonthJul   -4.744      4.263  -1.113  0.28325    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 4.624 on 15 degrees of freedom
-##   (1 observation deleted due to missingness)
-## Multiple R-squared:  0.8423,	Adjusted R-squared:  0.8107 
-## F-statistic:  26.7 on 3 and 15 DF,  p-value: 2.899e-06
-```
-
----
-
-Resultados del modelo
-
-```r
-anova(modeloD)
-```
-
-```
-## Analysis of Variance Table
-## 
-## Response: Depth
-##           Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
-## Sex        1   26.14   26.14  1.2226    0.2863    
-## Month      1 1659.85 1659.85 77.6455 2.569e-07 ***
-## Sex:Month  1   26.48   26.48  1.2387    0.2832    
-## Residuals 15  320.66   21.38                      
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-```
-
-]
-
-.pull-right[
-El tiempo de muestreo es significativo, independientemente del sexo, ambos sexos bucean mas profundo despues de la veda.
-]
-
-
----
-
-### Anovas de dos vias
-
-.pull-left[
-
-```r
-modeloKm&lt;-lm(formula=Km~Sex*Month,data=TablaCompleta)
+modeloKm&lt;-aov(formula=Km~Sex*Month,data=TablaCompleta)
 summary(modeloKm)
 ```
 
 ```
-## 
-## Call:
-## lm(formula = Km ~ Sex * Month, data = TablaCompleta)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -15.018  -6.853  -1.351   3.257  36.921 
-## 
-## Coefficients:
-##               Estimate Std. Error t value Pr(&gt;|t|)   
-## (Intercept)     17.402      5.872   2.964  0.00966 **
-## SexM             3.189      8.304   0.384  0.70636   
-## MonthJul        17.398      8.807   1.975  0.06692 . 
-## SexM:MonthJul   19.167     12.105   1.583  0.13417   
+##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## Sex          1    894     894   5.187 0.037835 *  
+## Month        1   3583    3583  20.786 0.000376 ***
+## Sex:Month    1    432     432   2.507 0.134174    
+## Residuals   15   2586     172                     
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 13.13 on 15 degrees of freedom
-##   (1 observation deleted due to missingness)
-## Multiple R-squared:  0.655,	Adjusted R-squared:  0.586 
-## F-statistic: 9.493 on 3 and 15 DF,  p-value: 0.0009233
+## 1 observation deleted due to missingness
 ```
+
+El tiempo de muestreo es significativo y sexo tambien pero no hay interaccion entre ambos.
+
 
 ---
 
-Resultados del modelo
+### Supuestos
 
+Homogeneidad de las varianzas
 
 ```r
-anova(modeloKm)
+leveneTest(Km~Sex:Month, data=TablaCompleta)
 ```
 
 ```
-## Analysis of Variance Table
+## Levene's Test for Homogeneity of Variance (center = median)
+##       Df F value Pr(&gt;F)
+## group  3  1.6434 0.2216
+##       15
+```
+
+```r
+plot(modeloKm,1)
+```
+
+![](CormoranesGrupo6_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+Normalidad
+
+```r
+plot(modeloKm,2)
+```
+
+![](CormoranesGrupo6_files/figure-html/normalidad km-1.png)&lt;!-- --&gt;
+
+```r
+aov_residuals &lt;- residuals(object = modeloKm)
+shapiro.test(x = aov_residuals)
+```
+
+```
 ## 
-## Response: Km
-##           Df Sum Sq Mean Sq F value    Pr(&gt;F)    
-## Sex        1  894.1   894.1  5.1868 0.0378349 *  
-## Month      1 3583.0  3583.0 20.7855 0.0003763 ***
-## Sex:Month  1  432.2   432.2  2.5073 0.1341737    
-## Residuals 15 2585.7   172.4                      
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 	Shapiro-Wilk normality test
+## 
+## data:  aov_residuals
+## W = 0.85865, p-value = 0.009307
 ```
-
-]
-
-.pull-right[
-El tiempo de muestreo es **marginalmente** significativo, independientemente del sexo, ambos sexos viajan mas lejos despues de la veda.
-]
-
-
 
 ---
 
 ## Mapas
 
-Funcion
+Funcion para crear mapas
 
 ```r
 Ploteame&lt;-function(Datos=Datos){
@@ -700,13 +693,10 @@ Ploteame&lt;-function(Datos=Datos){
         legend.text = element_text(size=8),
         panel.background = element_rect(fill = "white"),
         legend.justification=c(0,0), 
-        legend.position='top') + #c(0.65,0.65)
+        legend.position='top') + 
    labs(x = "Longitude", y="Latitude")+
-   geom_point(data = MiColonia, 
-             mapping = aes(x = Longitude, y = Latitude), 
-             color = "black",
-             fill="white", 
-             size = 5,shape=21,stroke = 3)
+   geom_point(data = MiColonia, mapping = aes(x = Longitude, y = Latitude), 
+             color = "black", fill="white", size = 5,shape=21,stroke = 3)
   return(MiPlot)
 }
 ```
@@ -763,25 +753,38 @@ MapasSexoVeda&lt;-plot_grid(MapaA,MapaB,
                          MapaC,MapaD,ncol = 2, nrow=2)
 ```
 
+
+
 ---
+class: center
 
 # Tracks separados por sexo y veda
-![](07PresentacionCormoranes2001_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
-
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/MapasSexoVeda.jpg" width="600" height="500" /&gt;
 
 ---
 
 # Conclusiones
 - Las hembras bucean mas profundo o viajan mas lejos que los machos?
-- Los cormoranes bucean mas profundo o viajan mas lejos en Julio comparado con Abril?
-
-
 Estos analisis preliminares sugieren que **no** hay diferencias significativas entre hembras y machos pero **si hay diferencias** entre antes y despues de la veda.
 
+- Los cormoranes bucean mas profundo o viajan mas lejos en Julio comparado con Abril?
+Estos analisis preliminares sugieren que **si** hay diferencias significativas entre hembras y machos y entre antes y despues de la veda.
+
+.pull-left[
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotBuceos.jpg" width="300" height="200" /&gt;
+]
+
+.pull-right[
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotDistancias.jpg" width="300" height="200" /&gt;
+] 
 
 ***Son solo maximos, no hicimos correccion de ceros ni calculamos promedios por individuo***
 
 ---
+
+Todo el material en:
+
+https://github.com/MiriamLL/Curso_Cormoranes
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
