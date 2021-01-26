@@ -6,4 +6,5 @@ Esta es la presentacion de nuestra parte incluye:
 -Script para hacer la presentacion (y los analisis)
 
 No incluye:
--Datos excel or csvs
+-Datos excel or csvs de los tracks, estos deben estar en su computadora.
+
