@@ -89,11 +89,12 @@ Quitamos los NA's
 TracksCormoranes <- TracksCormoranes[complete.cases(TracksCormoranes$Latitude),]
 ```
 
-Queda asi
-```{r Renombrar, echo=FALSE, include=FALSE, eval= TRUE}
+Le cambiamos el nombre al objeto para que este mas cortito
+```{r Renombrar, include=FALSE, eval= TRUE, echo=TRUE}
 Tracks<-TracksCormoranes
 ```
 
+Queda asi
 ```{r Tabla Tracks, echo=TRUE, eval= TRUE,comment=""}
 str(Tracks)
 ```
@@ -108,6 +109,7 @@ library(dplyr)
 library(tidyr)
 library(rnaturalearth)
 library(rnaturalearthdata)
+world <- ne_countries(scale = "medium", returnclass = "sf")
 ```
 
 - Extraer cordenadas de la colonia
@@ -118,15 +120,13 @@ MiColonia <- Tracks %>%
 
 - y graficar area de estudio
 ```{r Area de estudio, warning=FALSE}
-world <- ne_countries(scale = "medium", returnclass = "sf")
 PlotAreadeEstudio<-ggplot()+
     geom_sf(data = world) +
     coord_sf(xlim = c(-85, -65), ylim = c(-30, 0), expand = FALSE)+
     geom_point(data = MiColonia, aes(x = Longitude, y = Latitude), 
                color = "black",fill="white",
                size = 5,shape=21,stroke = 3)+
-  geom_text(aes(x=-75,y=-10),label = "PERU", size=5)+
-  theme_bw()
+  geom_text(aes(x=-75,y=-10),label = "PERU", size=5)+  theme_bw()
 ```
 
 ---
@@ -140,7 +140,7 @@ class: center
 #ggsave("PlotAreadeEstudio.jpg",path = ResultsFolder,width = 5, height = 8, units = "in")
 ```
 
-```{r echo=FALSE, out.height=500, out.width= 400}
+```{r echo=FALSE, out.height=500, out.width= 300}
 knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotAreadeEstudio.jpg")
 ```
 
@@ -412,8 +412,8 @@ table(TablaCompleta$Month,TablaCompleta$Sex)
 
 ## Profundidad de buceo
 ```{r interacciones depth, comment=''}
-Mis_interacciones<-aov(Depth~Sex+Month+Sex:Month, data=TablaCompleta)
-summary(Mis_interacciones)
+ModeloBuceos<-aov(Depth~Sex+Month+Sex:Month, data=TablaCompleta)
+summary(ModeloBuceos)
 ```
 
 --
@@ -436,7 +436,7 @@ leveneTest(Depth~Sex:Month, data=TablaCompleta)
 
 Normalidad de los residuales
 ```{r normalidad, echo=TRUE, comment=''}
-aov_residuals <- residuals(object = Mis_interacciones)
+aov_residuals <- residuals(object = ModeloBuceos)
 shapiro.test(x = aov_residuals )
 ```
 
@@ -562,7 +562,8 @@ MapasSexoVeda<-plot_grid(MapaA,MapaB,
 ---
 class: center
 
-# Tracks separados por sexo y veda
+### Tracks por sexo y veda
+
 ```{r echo=FALSE, out.height=500, out.width= 600}
 knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/MapasSexoVeda.jpg")
 ```
@@ -573,7 +574,6 @@ class: center
 
 # Conclusiones
 
-- Las hembras bucean mas profundo o viajan mas lejos que los machos?
 - Estos analisis preliminares sugieren que **no** hay diferencias significativas en la profundidad de buceo entre hembras y machos pero **si hay diferencias** entre antes y despues de la veda.
 
 
@@ -587,10 +587,9 @@ class: center
 
 # Conclusiones
 
-- Los cormoranes bucean mas profundo o viajan mas lejos en Julio comparado con Abril?
 - Estos analisis preliminares sugieren que **si** hay diferencias significativas entre hembras y machos y entre antes y despues de la veda. Los machos viajan mas lejos que las hembras y ambos viajan mas lejos en Julio.
 
-```{r echo=FALSE, out.height=300, out.width= 500}
+```{r echo=FALSE, out.height=300, out.width= 400}
 knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/MapasSexoVeda.jpg")
 ```
 
