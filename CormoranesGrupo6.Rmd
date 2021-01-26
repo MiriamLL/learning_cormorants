@@ -1,8 +1,8 @@
 ---
 title: "Cormoranes"
 subtitle: "Grupo 6"
-author: "Alonso, Carolina y Miriam"
-date: "2021/02/01"
+author: "Alonso Huyhua, Carolina Meza y Miriam Lerma"
+date: "2021/Febrero/01"
 output:
   xaringan::moon_reader:
     css: ["default","chocolate-fonts"]
@@ -16,36 +16,49 @@ class: center, middle
 # Biologging en cormoranes
 
 ---
+
 class: center, middle
 
 # Antecedentes
 
 Tenemos datos de cormoranes de una isla en Peru.  
 
-![](3Results/Cormoranes.jpg)
+<img src="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/107157281/1800", width="200", heigth="100">
 
-<img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/Cormoran.JPG", width="200", heigth="100">
+---
+
+class: center, middle
+
+# Antecedentes
+
+Los cormoranes ***(Phalacrocorax bougainvillii)*** se alimentan principalmente de anchoveta ***(Engraulis rigens)***
+
+```{r echo=FALSE, out.height=100, out.width= 200}
+knitr::include_graphics("https://tumi.lamolina.edu.pe/infopes/wp-content/uploads/2018/06/anchoveta.jpg")
+```
 
 --
 
-1. Se muestrearon antes de la temporada de pesca (Apr) y despues (Jul).     
+Los datos se tomaron:   
+- En abril (antes de que se abra la temporada de pesca) y julio (durante la temporada de pesca), y 
+- Se muestrearon hembras y machos.  
 
---
-
-2. Se muestrearon hembras y machos.  
 
 ---
 class: center, middle
 
 # Justificacion
 
-- Conocer si hay diferencias entre sexos en las areas y profundidades que utilizan para alimentarse nos ayuda a mejorar medidas de proteccion de la especie. 
---
+- Conocer si hay diferencias entre sexos en: las distancias que viajan de la colonia y profundidades que utilizan para alimentarse.
+
+- Esto nos ayuda a mejorar medidas de proteccion de la especie. 
 
 - Asi como tener informacion de que sexo puede ser mas vulnerable a la temporada de pesca. 
 
 ---
+
 class: center, middle
+
 # Objetivos
 
 Queremos saber:   
@@ -53,7 +66,7 @@ Queremos saber:
 
 --
 
-- Si los cormoranes bucean mas profundo o viajan mas lejos en Julio comparado con Abril.
+- Si los cormoranes bucean mas profundo o viajan mas lejos en Julio (cuando esta abierta la pesca) comparado con Abril (antes de que se abra la temporada).
 
 ---
 
@@ -89,7 +102,6 @@ Quitamos los NA's
 TracksCormoranes <- TracksCormoranes[complete.cases(TracksCormoranes$Latitude),]
 ```
 
-Le cambiamos el nombre al objeto para que este mas cortito
 ```{r Renombrar, include=FALSE, eval= TRUE, echo=TRUE}
 Tracks<-TracksCormoranes
 ```
@@ -130,6 +142,7 @@ PlotAreadeEstudio<-ggplot()+
 ```
 
 ---
+
 class: center
 
 ## Area de estudio
@@ -178,16 +191,19 @@ PlotTracks<-ggplot()+
 ---
 
 ## Tracks
-Con el codigo anterior, generamos esto:
-```{r echo=FALSE, out.height=400, out.width= 600}
-knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotTracks.jpg")
-```
 
+Con el codigo anterior, generamos esto:
 ```{r, fig.width=8, echo=TRUE, eval= FALSE, include=FALSE}
 #ResultsFolder<-here::here("3Results")
 #PlotTracks
 #ggsave("PlotTracks.jpg",path = ResultsFolder,width = 8, height = 5, units = "in")
 ```
+
+```{r echo=FALSE, out.height=400, out.width= 600}
+knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotTracks.jpg")
+```
+
+
 
 ---
 
@@ -216,7 +232,6 @@ LaColonia<- SpatialPoints(cbind(MiColonia$Longitude,MiColonia$Latitude))
 ---
 
 ### Distancias en metros
-
 Calculamos distancia en metros y transformamos a kilometros
 ```{r Metros, echo=TRUE, eval= TRUE, warning=FALSE}
 Metros<-(distm(TracksSp,MiColonia,fun = distHaversine))
@@ -246,7 +261,6 @@ head(DistanciaColonia,8)
 ---
 
 ### Maximos de buceo por individuo
-
 ```{r Convertir buceos, echo=TRUE, eval= TRUE}
 Tracks$Depth<-as.numeric(Tracks$Depth) 
 ```
@@ -301,7 +315,7 @@ TablaCompleta %>%
 
 ```{r PlotBuceos, echo=TRUE, eval= TRUE, include=TRUE, warning=FALSE}
 PlotBuceos<-ggplot(TablaCompleta, aes(x=Month, y=Depth,fill=Sex))+
-  xlab("Veda")+ylab("Profundidad de buceo maxima \n (m)")+
+  xlab("Temporada de pesca")+ylab("Profundidad de buceo maxima \n (m)")+
   geom_boxplot()+
     scale_fill_manual(values=c("#f4a261","#2a9d8f","#f4a261","#2a9d8f")) +
   theme_classic()+
@@ -319,9 +333,9 @@ PlotBuceos<-ggplot(TablaCompleta, aes(x=Month, y=Depth,fill=Sex))+
 
 ## Figura preliminar: buceos
 ```{r, warning=FALSE, eval=FALSE, include=FALSE}
-#ResultsFolder<-here::here("3Results")
-#PlotBuceos
-#ggsave("PlotBuceos.jpg",path = ResultsFolder,width = 8, height = 5, units = "in")
+ResultsFolder<-here::here("3Results")
+PlotBuceos
+ggsave("PlotBuceos.jpg",path = ResultsFolder,width = 8, height = 5, units = "in")
 ```
 
 ```{r echo=FALSE, out.height=400, out.width= 600}
@@ -343,7 +357,7 @@ TablaCompleta %>%
 ```{r PlotDistanciasKm, echo=TRUE, eval= TRUE, include=TRUE,message=FALSE, warning=FALSE}
 PlotDistancias<-ggplot(TablaCompleta, aes(x=Month, y=Km,fill=Sex))+
   geom_boxplot()+
-  xlab("Veda")+ylab("Distancia de la colonia \n (m)")+
+  xlab("Temporada de pesca")+ylab("Distancia de la colonia \n (m)")+
   geom_boxplot()+
     scale_fill_manual(values=c("#f4a261","#2a9d8f","#f4a261","#2a9d8f")) +
   theme_classic()+
@@ -360,9 +374,9 @@ PlotDistancias<-ggplot(TablaCompleta, aes(x=Month, y=Km,fill=Sex))+
 ---
 ## Figura preliminar: distancias
 ```{r,message=FALSE, warning=FALSE, include=FALSE,eval=FALSE}
-#ResultsFolder<-here::here("3Results")
-#PlotDistancias
-#ggsave("PlotDistancias.jpg",path = ResultsFolder,width = 8, height = 5, units = "in")
+ResultsFolder<-here::here("3Results")
+PlotDistancias
+ggsave("PlotDistancias.jpg",path = ResultsFolder,width = 8, height = 5, units = "in")
 ```
 
 ```{r echo=FALSE, out.height=400, out.width= 600}
@@ -387,18 +401,18 @@ str(TablaCompleta)
 # Estadisticos
 
 - De acuerdo a nuestros objetivos lo mejor es usar una ANOVA de dos vias. 
-- Para evaluar el efecto de dos variables (sexo y veda) en una variable de respuesta (maximo de buceos y distancia maxima de los viajes, respectivamente). 
+- Para evaluar el efecto de dos variables (Sexo y Temporada de pesca) en una variable de respuesta (maximo de buceos y distancia maxima de los viajes, respectivamente). 
 
 --
 
 Hipotesis a probar.
 1. No hay diferencias en medias de Sexo.
-2. No hay diferencias en medias de Veda.
-3. No hay interaccion entre Sexo y Veda.
+2. No hay diferencias en medias de Temporada de pesca (Abr=antes de la temporada, Julio=durante la temporada).
+3. No hay interaccion entre Sexo y Temporada de pesca.
 
 --
 
-Factores: Sexo, Veda
+Factores: Sexo, Temporada de pesca
 --
 
 Tamaño de muestra.
@@ -408,9 +422,13 @@ Nuestras muestras estan balanceadas:
 table(TablaCompleta$Month,TablaCompleta$Sex)
 ```
 
+Nota: ***Son solo maximos, no hicimos correccion de ceros ni calculamos promedios por individuo***
+
+
 ---
 
 ## Profundidad de buceo
+
 ```{r interacciones depth, comment=''}
 ModeloBuceos<-aov(Depth~Sex+Month+Sex:Month, data=TablaCompleta)
 summary(ModeloBuceos)
@@ -497,10 +515,11 @@ Ploteame<-function(Datos=Datos){
         legend.text = element_text(size=8),
         panel.background = element_rect(fill = "white"),
         legend.justification=c(0,0), 
+        plot.title = element_text(size = 15, face = "bold"),
         legend.position='top') + 
    labs(x = "Longitude", y="Latitude")+
    geom_point(data = MiColonia, mapping = aes(x = Longitude, y = Latitude), 
-             color = "black", fill="white", size = 5,shape=21,stroke = 3)
+             color = "black", fill="white", size = 10,shape=21,stroke = 3)
   return(MiPlot)
 }
 ```
@@ -517,25 +536,25 @@ Creamos mapas por sexo y etapa (usando la funcion de 'Ploteame')
 ```{r FA, eval=TRUE}
 FA<-subset(TracksC,TracksC$Sex=='F' & TracksC$Month=='Apr')
 MapaA<-Ploteame(Datos=FA)+
-  ggtitle('Hembras durante de la veda (Abr)')
+  ggtitle('Hembras Abril')
 ```
 
 ```{r FD, eval=TRUE}
 FD<-subset(TracksC,TracksC$Sex=='F' & TracksC$Month=='Jul')
 MapaB<-Ploteame(Datos=FD)+
-  ggtitle('Hembras despues de la veda (Jul)')
+  ggtitle('Hembras Julio')
 ```
 
 ```{r MA, eval=TRUE}
 MA<-subset(TracksC,TracksC$Sex=='M' & TracksC$Month=='Apr')
 MapaC<-Ploteame(Datos=MA)+
-  ggtitle('Machos antes de la veda (Apr)')
+  ggtitle('Machos Abril')
 ```
 
 ```{r MD, eval=TRUE}
 MD<-subset(TracksC,TracksC$Sex=='M' & TracksC$Month=='Jul')
 MapaD<-Ploteame(Datos=MD)+
-  ggtitle('Machos despues de la veda (Jul)')
+  ggtitle('Machos Julio')
 ```
 
 ---
@@ -554,48 +573,141 @@ MapasSexoVeda<-plot_grid(MapaA,MapaB,
 ```
 
 ```{r, eval=FALSE,include=FALSE, echo=FALSE}
-#ResultsFolder<-here::here("3Results")
-#MapasSexoVeda
-#ggsave("MapasSexoVeda.jpg",path = ResultsFolder,width = 8, height = 8, units = "in")
+ResultsFolder<-here::here("3Results")
+MapasSexoVeda
+ggsave("MapasSexoVeda.jpg",path = ResultsFolder,width = 8, height = 8, units = "in")
 ```
 
 ---
 class: center
 
-### Tracks por sexo y veda
+### Tracks por sexo y temporada
 
 ```{r echo=FALSE, out.height=500, out.width= 600}
 knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/MapasSexoVeda.jpg")
 ```
 
+
 ---
 
 class: center
 
-# Conclusiones
+## Discusion
+### Profundidad de buceo
 
-- Estos analisis preliminares sugieren que **no** hay diferencias significativas en la profundidad de buceo entre hembras y machos pero **si hay diferencias** entre antes y despues de la veda.
+Estos analisis preliminares sugieren que **no** hay diferencias significativas entre hembras y machos en las profundidades de buceo pero **si hay diferencias** entre antes y durante la temporada de pesca. Ambos sexos bucean mas profundo durante la temporada de pesca.  
 
+Los cormoranes bucean mas profundo durante la temporada de pesca.
 
 ```{r echo=FALSE, out.height=300, out.width= 400}
 knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotBuceos.jpg")
 ```
 
-
 ---
+
 class: center
 
-# Conclusiones
+## Discusion
+### Profundidad de buceo
 
-- Estos analisis preliminares sugieren que **si** hay diferencias significativas entre hembras y machos y entre antes y despues de la veda. Los machos viajan mas lejos que las hembras y ambos viajan mas lejos en Julio.
+Lo cual apuntaria a:  
+a) Cambio en la dieta, presas de areas mas profundo.  
+b) Cambio en las condiciones ambientales, que obliga a los cormoranes a bucear mas profundo.   
+c) Un efecto de la temporada de pesca, tal vez un decremento en la disponibilidad de alimento cuando entran en competencia con las pesquerias, que obliga a los cormoranes a bucear mas profundo.  
+
+```{r echo=FALSE, out.height=300, out.width= 400}
+knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotBuceos.jpg")
+```
+
+---
+
+class: center
+
+## Discusion
+### Distancia de la colonia
+
+- Estos analisis preliminares sugieren que **si** hay diferencias significativas en las  distancias maximas que viajan entre hembras y machos, y entre durante y despues de la veda.  
+
+Los machos viajan mas lejos que las hembras, y ambos viajan mas lejos en julio.
 
 ```{r echo=FALSE, out.height=300, out.width= 400}
 knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/MapasSexoVeda.jpg")
 ```
 
-Nota: ***Son solo maximos, no hicimos correccion de ceros ni calculamos promedios por individuo***
+---
+
+class: center
+
+## Discusion
+### Distancia de la colonia
+
+Lo cual sugiere que hay:  
+Un efecto del sexo, donde los machos viajan en general mas lejos que las hembras, por que consumen diferentes presas, por competencia entre sexos, o por diferentes roles durante la reproduccion.  
+
+a) Cambio en la dieta, por especies que se encuentran mas lejos de la colonia.  
+b) Cambio en las condiciones ambientales que afecten la disponibilidad de presas entre abril y julio, que obliga a los cormoranes a viajar mas lejos.  
+c) Un efecto de la temporada de pesca, tal vez un decremento en la disponibilidad de alimento que obliga a los cormoranes a viajar mas lejos.
 
 
+---
+
+class: center
+
+# Discusion
+## Abril
+Datos de Global fishing watch para el area general donde se encuentra la colonia para el mes de abril (antes de la temporada de pesca)
+
+```{r, echo=FALSE, out.height=300, out.width= 500}
+knitr::include_graphics('https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/GFW1.jpeg')
+```
+
+Coincide en el tiempo en que los buceos son menos profundos, y los viajes de los cormoranes mas cortos.
+
+---
+
+class: center
+
+# Discusion
+## Julio
+Datos de Global fishing watch para el area general donde se encuentra la colonia para el mes de julio (durante de la temporada de pesca)
+
+```{r, echo=FALSE, out.height=300, out.width= 500}
+knitr::include_graphics('https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/GFW2.jpeg')
+```
+
+Coincide en el tiempo en que los buceos son mas profundos, y los viajes de los cormoranes mas largos.
+
+--
+
+Es claro que el esfuerzo de pesca es mayor en Julio, y por lo tanto una razon potencial que puede explicar el cambio en el comportamiento de los cormoranes. 
+
+---
+
+# Conclusiones
+
+Encontramos que:
+
+
+- No existen diferencias entre hembras y machos en las profundidades maximas del buceo, pero ambos sexos bucean mas profundo durante la temporada de pesca.
+
+--
+
+- Hay diferencias las distancias de la colonia, los machos viajan mas lejos que las hembras antes y durante la temporada de pesca y ambos sexos viajan mayores distancias durante la temporada de pesca. 
+
+
+--
+
+Esto sugiere que los sexos se alimentan en diferentes areas, pero a profundidades similares, pero que en julio los recursos estan menos disponibles y por lo tanto los cormoranes viajan mas lejos. 
+
+--
+
+Aunque este es un estudio preliminar, conocer si hay diferencias entre sexos en las areas y profundidades que utilizan para alimentarse nos ayuda a mejorar medidas de proteccion de la especie.
+
+--
+
+Por ahora la pesca parece afectar el comportamiento de los cormoranes ya sea por competencia directa o por que reducen la disponibilidad de presas.
+
+En algunas especies esto puede afectar su exito reproductivo, pero esto queda para estudios futuros.
 
 ---
 
@@ -605,9 +717,11 @@ https://github.com/MiriamLL/Curso_Cormoranes
 
 --
 
+class: center
+
 ## Gracias 
 
-```{r echo=FALSE, out.height=200, out.width= 300}
+```{r echo=FALSE, out.height=200, out.width= 400}
 knitr::include_graphics("https://scontent.fham2-1.fna.fbcdn.net/v/t1.0-9/125369794_1017592122068396_8216067479374620034_o.png?_nc_cat=107&ccb=2&_nc_sid=09cbfe&_nc_ohc=Zs_v8fI_zW8AX-BDdkX&_nc_ht=scontent.fham2-1.fna&oh=a34c8fc4c28cc3d838702576ed65b1a0&oe=6033C883")
 ```
 !
