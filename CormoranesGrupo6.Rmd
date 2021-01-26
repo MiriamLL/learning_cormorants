@@ -1,0 +1,621 @@
+---
+title: "Cormoranes"
+subtitle: "Grupo 6"
+author: "Alonso, Carolina y Miriam"
+date: "2021/02/01"
+output:
+  xaringan::moon_reader:
+    css: ["default","chocolate-fonts"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: true
+---
+class: center, middle
+
+# Biologging en cormoranes
+
+---
+class: center, middle
+
+# Antecedentes
+
+Tenemos datos de cormoranes de una isla en Peru.  
+
+![](3Results/Cormoranes.jpg)
+
+<img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/Cormoran.JPG", width="200", heigth="100">
+
+--
+
+1. Se muestrearon antes de la temporada de pesca (Apr) y despues (Jul).     
+
+--
+
+2. Se muestrearon hembras y machos.  
+
+---
+class: center, middle
+
+# Justificacion
+
+- Conocer si hay diferencias entre sexos en las areas y profundidades que utilizan para alimentarse nos ayuda a mejorar medidas de proteccion de la especie. 
+--
+
+- Asi como tener informacion de que sexo puede ser mas vulnerable a la temporada de pesca. 
+
+---
+class: center, middle
+# Objetivos
+
+Queremos saber:   
+- Si las hembras bucean mas profundo o viajan mas lejos que los machos  
+
+--
+
+- Si los cormoranes bucean mas profundo o viajan mas lejos en Julio comparado con Abril.
+
+---
+
+# Metodologia
+
+Primero importamos los excels de la carpeta.
+
+Usando estos paquetes:
+```{r Paquetes Datos, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
+library(here)
+library(readxl)
+```
+
+Siguiendo este codigo:
+```{r Unir excels, echo=TRUE, eval=TRUE}
+MainFolder<-here()
+DataFolder<-paste0(MainFolder,'//0Excels')
+files_Cormorant <- list.files(DataFolder,
+                              pattern="*.xlsx", 
+                              full.names=TRUE)
+List_Cormoranes <- lapply(files_Cormorant, 
+                          read_excel)
+TracksCormoranes <- do.call("rbind", 
+                            List_Cormoranes)
+```
+
+---
+
+## Unir tablas
+
+Quitamos los NA's
+```{r Nas, echo=TRUE, eval=TRUE, include=TRUE}
+TracksCormoranes <- TracksCormoranes[complete.cases(TracksCormoranes$Latitude),]
+```
+
+Queda asi
+```{r Renombrar, echo=FALSE, include=FALSE, eval= TRUE}
+Tracks<-TracksCormoranes
+```
+
+```{r Tabla Tracks, echo=TRUE, eval= TRUE,comment=""}
+str(Tracks)
+```
+
+---
+
+## Area de estudio
+Usando estos paquetes
+```{r Paquetes2, echo=TRUE, eval= TRUE, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(rnaturalearth)
+library(rnaturalearthdata)
+```
+
+- Extraer cordenadas de la colonia
+```{r Colonia, echo=TRUE, eval= TRUE}
+MiColonia <- Tracks %>% 
+  summarise(Longitude = first(Longitude),Latitude  = first(Latitude), )
+```
+
+- y graficar area de estudio
+```{r Area de estudio, warning=FALSE}
+world <- ne_countries(scale = "medium", returnclass = "sf")
+PlotAreadeEstudio<-ggplot()+
+    geom_sf(data = world) +
+    coord_sf(xlim = c(-85, -65), ylim = c(-30, 0), expand = FALSE)+
+    geom_point(data = MiColonia, aes(x = Longitude, y = Latitude), 
+               color = "black",fill="white",
+               size = 5,shape=21,stroke = 3)+
+  geom_text(aes(x=-75,y=-10),label = "PERU", size=5)+
+  theme_bw()
+```
+
+---
+class: center
+
+## Area de estudio
+
+```{r Plot Area Estudio, echo=FALSE, eval=FALSE, include=FALSE}
+#ResultsFolder<-here::here("3Results")
+#PlotAreadeEstudio
+#ggsave("PlotAreadeEstudio.jpg",path = ResultsFolder,width = 5, height = 8, units = "in")
+```
+
+```{r echo=FALSE, out.height=500, out.width= 400}
+knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotAreadeEstudio.jpg")
+```
+
+
+---
+## Tracks
+
+Ver tracks
+```{r PlotTracks, echo=TRUE, eval= TRUE}
+PlotTracks<-ggplot()+
+    geom_sf(data = world) +
+    coord_sf(xlim = c(-81.5, -79.5), ylim = c(-7.6, -6.6), expand = FALSE)+
+    geom_point(data = MiColonia, aes(x = Longitude, y = Latitude), 
+               color = "black",fill="white",
+               size = 5,shape=21,stroke = 3)+
+  geom_text(aes(x=-79.8,y=-6.8),label = "PERU", size=8)+
+  geom_path(data = Tracks, aes(x = Longitude, y = Latitude, color=TagID))+
+  geom_point(data = MiColonia,mapping = aes(x = Longitude, y = Latitude), 
+             color = "black",fill="white", size = 5,shape=19, stroke = 3)+
+  theme_bw()+
+  theme(panel.border = element_rect(linetype = "solid", 
+                                    colour = "black", size=1.5), 
+        axis.title = element_blank(),
+        axis.ticks.length = unit(3, "pt"),
+        axis.text.x =  element_text(size=18),
+        axis.text.y =  element_text(size=18),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        legend.position = "none") +
+   labs(x = "Longitude", y="Latitude")+
+   ggtitle('Tracks de todos los individuos')
+```
+
+---
+
+## Tracks
+Con el codigo anterior, generamos esto:
+```{r echo=FALSE, out.height=400, out.width= 600}
+knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotTracks.jpg")
+```
+
+```{r, fig.width=8, echo=TRUE, eval= FALSE, include=FALSE}
+#ResultsFolder<-here::here("3Results")
+#PlotTracks
+#ggsave("PlotTracks.jpg",path = ResultsFolder,width = 8, height = 5, units = "in")
+```
+
+---
+
+##  Calcular maximos de distancia de la colonia por individuo
+
+Paquetes
+```{r Paquetes espaciales, echo=TRUE, eval= TRUE, warning=FALSE, message=FALSE}
+library(geosphere) #distm
+library(rgeos) #coordinates
+```
+
+Transformamos a datos espaciales
+- Los tracks:
+```{r TracksSp, echo=TRUE, eval= TRUE}
+TracksSp<-Tracks
+TracksSp$lat<-TracksSp$Latitude
+TracksSp$lon<-TracksSp$Longitude
+coordinates(TracksSp)<-~lon+lat
+```
+
+- y la colonia:
+```{r ColoniaSp, echo=TRUE, eval= TRUE}
+LaColonia<- SpatialPoints(cbind(MiColonia$Longitude,MiColonia$Latitude)) 
+```
+
+---
+
+### Distancias en metros
+
+Calculamos distancia en metros y transformamos a kilometros
+```{r Metros, echo=TRUE, eval= TRUE, warning=FALSE}
+Metros<-(distm(TracksSp,MiColonia,fun = distHaversine))
+TracksDist<-cbind(Tracks,Metros)
+TracksDist$Km<-TracksDist$Metros/1000
+```
+
+```{r Tabla, echo=TRUE, eval= TRUE}
+head(TracksDist)
+```
+
+---
+
+### Calculamos distancias por individuos.
+
+Queremos saber la distancia maxima de cada individuo
+```{r DistanciaColonia, echo=TRUE, eval= TRUE}
+DistanciaColonia<-TracksDist %>%
+  group_by(TagID) %>%
+   summarise_at(c("Km"), max, na.rm = TRUE) 
+```
+
+```{r DistanciaColonia2,echo=TRUE, eval= TRUE}
+head(DistanciaColonia,8)
+```
+
+---
+
+### Maximos de buceo por individuo
+
+```{r Convertir buceos, echo=TRUE, eval= TRUE}
+Tracks$Depth<-as.numeric(Tracks$Depth) 
+```
+
+```{r ProfundidadBuceos, echo=TRUE, eval= TRUE}
+ProfundidadBuceos<-Tracks %>%
+  group_by(TagID) %>%
+   summarise_at(c("Depth"), max, na.rm = TRUE) 
+```
+
+```{r ProfundidadBuceoTabla, echo=TRUE, eval= TRUE}
+head(ProfundidadBuceos,8)
+```
+
+---
+
+## Crear tabla
+
+Importar datos de medidas
+```{r Medidas, echo=TRUE, eval= TRUE, warning=FALSE}
+Medidas<-read_excel(here("./1Datos/Data_cormorantX.xlsx"))
+colnames(Medidas)[1]<-'TagID'
+```
+
+Unir medidas con distancias maximas y profundidades de buceo
+```{r Unir tablas, echo=TRUE, eval= TRUE}
+TablaDistancias<-left_join(Medidas,DistanciaColonia,by='TagID')
+TablaCompleta<-left_join(TablaDistancias,ProfundidadBuceos,by='TagID')
+```
+
+Tabla completa:
+```{r Ver tabla, echo=TRUE, eval= TRUE, include=TRUE}
+head(TablaCompleta)
+```
+
+
+---
+
+# Resultados
+
+### Promedios de profundidades maximas de buceo
+
+```{r Tabla Completa, echo=TRUE, eval= TRUE, include=TRUE, message=FALSE, warning=FALSE}
+TablaCompleta %>%
+  group_by(Sex,Month) %>%
+  summarise_at(c("Depth"), funs(mean, sd), na.rm = TRUE) 
+```
+
+---
+
+## Codigo para figura
+
+```{r PlotBuceos, echo=TRUE, eval= TRUE, include=TRUE, warning=FALSE}
+PlotBuceos<-ggplot(TablaCompleta, aes(x=Month, y=Depth,fill=Sex))+
+  xlab("Veda")+ylab("Profundidad de buceo maxima \n (m)")+
+  geom_boxplot()+
+    scale_fill_manual(values=c("#f4a261","#2a9d8f","#f4a261","#2a9d8f")) +
+  theme_classic()+
+  theme(axis.text.x =  element_text(size=12),
+        axis.title.x = element_text(size=12),
+        axis.text.y =  element_text(size=12),
+        axis.title.y = element_text(size=12),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        legend.position = "top")
+```
+
+---
+
+## Figura preliminar: buceos
+```{r, warning=FALSE, eval=FALSE, include=FALSE}
+#ResultsFolder<-here::here("3Results")
+#PlotBuceos
+#ggsave("PlotBuceos.jpg",path = ResultsFolder,width = 8, height = 5, units = "in")
+```
+
+```{r echo=FALSE, out.height=400, out.width= 600}
+knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotBuceos.jpg")
+```
+
+---
+
+### Promedios de distancia maxima de la colonia
+```{r PromedioBuceosTabla, echo=TRUE, eval= TRUE, include=TRUE, message=FALSE, warning=FALSE, comment=''}
+TablaCompleta %>%
+  group_by(Sex,Month) %>%
+  summarise_at(c("Km"), funs(mean, sd), na.rm = TRUE) 
+```
+
+---
+
+### Codigo figura
+```{r PlotDistanciasKm, echo=TRUE, eval= TRUE, include=TRUE,message=FALSE, warning=FALSE}
+PlotDistancias<-ggplot(TablaCompleta, aes(x=Month, y=Km,fill=Sex))+
+  geom_boxplot()+
+  xlab("Veda")+ylab("Distancia de la colonia \n (m)")+
+  geom_boxplot()+
+    scale_fill_manual(values=c("#f4a261","#2a9d8f","#f4a261","#2a9d8f")) +
+  theme_classic()+
+  theme(axis.text.x =  element_text(size=12),
+        axis.title.x = element_text(size=12),
+        axis.text.y =  element_text(size=12),
+        axis.title.y = element_text(size=12),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        legend.position = "top")
+```
+
+---
+## Figura preliminar: distancias
+```{r,message=FALSE, warning=FALSE, include=FALSE,eval=FALSE}
+#ResultsFolder<-here::here("3Results")
+#PlotDistancias
+#ggsave("PlotDistancias.jpg",path = ResultsFolder,width = 8, height = 5, units = "in")
+```
+
+```{r echo=FALSE, out.height=400, out.width= 600}
+knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotDistancias.jpg")
+```
+
+---
+
+# Estadisticos
+
+
+- Variables a probar: profundidad del buceo y distancia maxima
+- Factores: Sexo y Meses (temporadas de pesca).
+
+
+```{r TablaCompleta head, echo=TRUE, eval= TRUE, include=TRUE, comment=''}
+str(TablaCompleta)
+```
+
+---
+
+# Estadisticos
+
+- De acuerdo a nuestros objetivos lo mejor es usar una ANOVA de dos vias. 
+- Para evaluar el efecto de dos variables (sexo y veda) en una variable de respuesta (maximo de buceos y distancia maxima de los viajes, respectivamente). 
+
+--
+
+Hipotesis a probar.
+1. No hay diferencias en medias de Sexo.
+2. No hay diferencias en medias de Veda.
+3. No hay interaccion entre Sexo y Veda.
+
+--
+
+Factores: Sexo, Veda
+--
+
+Tamaño de muestra.
+Nuestras muestras estan balanceadas:
+ 
+```{r, comment=''}
+table(TablaCompleta$Month,TablaCompleta$Sex)
+```
+
+---
+
+## Profundidad de buceo
+```{r interacciones depth, comment=''}
+Mis_interacciones<-aov(Depth~Sex+Month+Sex:Month, data=TablaCompleta)
+summary(Mis_interacciones)
+```
+
+--
+
+El tiempo (mes) de muestreo es significativo, independientemente del sexo.
+
+---
+
+### Supuestos
+
+Paquete
+```{r,warning=FALSE, include=FALSE, echo=TRUE}
+library(car) #leveneTest
+```
+
+Homogeneidad de las varianzas
+```{r homogeneidad, echo=TRUE, comment=''}
+leveneTest(Depth~Sex:Month, data=TablaCompleta)
+```
+
+Normalidad de los residuales
+```{r normalidad, echo=TRUE, comment=''}
+aov_residuals <- residuals(object = Mis_interacciones)
+shapiro.test(x = aov_residuals )
+```
+
+```{r normalidad2}
+#plot(Mis_interacciones,1)
+#plot(Mis_interacciones,2)
+```
+
+---
+
+### Anovas de dos vias
+Para las distancias lo transformamos a escala logaritmica para la normalidad de los residuales. 
+```{r anova km, comment=''}
+modeloKm<-aov(formula=log(Km)~Sex*Month,data=TablaCompleta)
+summary(modeloKm)
+```
+
+--
+
+El tiempo de muestreo es significativo y sexo tambien pero no hay interaccion entre ambos.
+
+
+---
+
+### Supuestos
+
+Homogeneidad de las varianzas
+```{r, comment=''}
+leveneTest(log(Km)~Sex:Month, data=TablaCompleta)
+```
+
+Normalidad
+```{r normalidad km, comment=''}
+aov_residuals <- residuals(object = modeloKm)
+shapiro.test(x = aov_residuals)
+```
+
+---
+
+## Mapas
+
+Funcion para crear mapas
+```{r plots por individiduos}
+Ploteame<-function(Datos=Datos){
+  MiPlot<-ggplot()+
+    geom_sf(data = world) +
+    coord_sf(xlim = c(-81, -80), ylim = c(-7.5, -6.5), expand = FALSE)+
+    geom_path(data = Datos, aes(x = Longitude, y = Latitude, color=TagID), size=1)+
+  theme_bw()+
+  theme(panel.border = element_rect(linetype = "solid", colour = "black", size=1.5),
+        axis.title = element_text(size=8),
+        axis.ticks.length = unit(3, "pt"),
+        axis.text.x =  element_text(size=8),
+        axis.text.y =  element_text(size=8),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        legend.title = element_text(size=8),
+        legend.text = element_text(size=8),
+        panel.background = element_rect(fill = "white"),
+        legend.justification=c(0,0), 
+        legend.position='top') + 
+   labs(x = "Longitude", y="Latitude")+
+   geom_point(data = MiColonia, mapping = aes(x = Longitude, y = Latitude), 
+             color = "black", fill="white", size = 5,shape=21,stroke = 3)
+  return(MiPlot)
+}
+```
+
+---
+
+# Crear un mapa por sexo y mes
+Agregar medidas a Tracks
+```{r unir tablas por id}
+TracksC<-left_join(Tracks,Medidas,by='TagID')
+```
+
+Creamos mapas por sexo y etapa (usando la funcion de 'Ploteame') 
+```{r FA, eval=TRUE}
+FA<-subset(TracksC,TracksC$Sex=='F' & TracksC$Month=='Apr')
+MapaA<-Ploteame(Datos=FA)+
+  ggtitle('Hembras durante de la veda (Abr)')
+```
+
+```{r FD, eval=TRUE}
+FD<-subset(TracksC,TracksC$Sex=='F' & TracksC$Month=='Jul')
+MapaB<-Ploteame(Datos=FD)+
+  ggtitle('Hembras despues de la veda (Jul)')
+```
+
+```{r MA, eval=TRUE}
+MA<-subset(TracksC,TracksC$Sex=='M' & TracksC$Month=='Apr')
+MapaC<-Ploteame(Datos=MA)+
+  ggtitle('Machos antes de la veda (Apr)')
+```
+
+```{r MD, eval=TRUE}
+MD<-subset(TracksC,TracksC$Sex=='M' & TracksC$Month=='Jul')
+MapaD<-Ploteame(Datos=MD)+
+  ggtitle('Machos despues de la veda (Jul)')
+```
+
+---
+
+# Unir mapas
+
+Paquete
+```{r cowplot, warning=FALSE}
+library(cowplot)
+```
+
+Unir plot
+```{r sexovedaplot, eval=TRUE}
+MapasSexoVeda<-plot_grid(MapaA,MapaB,
+                         MapaC,MapaD,ncol = 2, nrow=2)
+```
+
+```{r, eval=FALSE,include=FALSE, echo=FALSE}
+#ResultsFolder<-here::here("3Results")
+#MapasSexoVeda
+#ggsave("MapasSexoVeda.jpg",path = ResultsFolder,width = 8, height = 8, units = "in")
+```
+
+---
+class: center
+
+# Tracks separados por sexo y veda
+```{r echo=FALSE, out.height=500, out.width= 600}
+knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/MapasSexoVeda.jpg")
+```
+
+---
+
+class: center
+
+# Conclusiones
+
+- Las hembras bucean mas profundo o viajan mas lejos que los machos?
+- Estos analisis preliminares sugieren que **no** hay diferencias significativas en la profundidad de buceo entre hembras y machos pero **si hay diferencias** entre antes y despues de la veda.
+
+
+```{r echo=FALSE, out.height=300, out.width= 400}
+knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotBuceos.jpg")
+```
+
+
+---
+class: center
+
+# Conclusiones
+
+- Los cormoranes bucean mas profundo o viajan mas lejos en Julio comparado con Abril?
+- Estos analisis preliminares sugieren que **si** hay diferencias significativas entre hembras y machos y entre antes y despues de la veda. Los machos viajan mas lejos que las hembras y ambos viajan mas lejos en Julio.
+
+```{r echo=FALSE, out.height=300, out.width= 500}
+knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/MapasSexoVeda.jpg")
+```
+
+Nota: ***Son solo maximos, no hicimos correccion de ceros ni calculamos promedios por individuo***
+
+
+
+---
+
+## Todo el material en
+
+https://github.com/MiriamLL/Curso_Cormoranes
+
+--
+
+## Gracias 
+
+```{r echo=FALSE, out.height=200, out.width= 300}
+knitr::include_graphics("https://scontent.fham2-1.fna.fbcdn.net/v/t1.0-9/125369794_1017592122068396_8216067479374620034_o.png?_nc_cat=107&ccb=2&_nc_sid=09cbfe&_nc_ohc=Zs_v8fI_zW8AX-BDdkX&_nc_ht=scontent.fham2-1.fna&oh=a34c8fc4c28cc3d838702576ed65b1a0&oe=6033C883")
+```
+!
+
+```{r, echo=FALSE, include=FALSE, eval=TRUE}
+library(emo)
+```
+
+`r emo::ji("smile")`
+
