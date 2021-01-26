@@ -125,15 +125,22 @@ tibble [1,185,421 x 9] (S3: tbl_df/tbl/data.frame)
 ## Area de estudio
 Usando estos paquetes
 
+```r
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(rnaturalearth)
+library(rnaturalearthdata)
+```
 
-Extraer cordenadas de la colonia
+- Extraer cordenadas de la colonia
 
 ```r
 MiColonia &lt;- Tracks %&gt;% 
   summarise(Longitude = first(Longitude),Latitude  = first(Latitude), )
 ```
 
-y graficar area de estudio
+- y graficar area de estudio
 
 ```r
 world &lt;- ne_countries(scale = "medium", returnclass = "sf")
@@ -148,17 +155,17 @@ PlotAreadeEstudio&lt;-ggplot()+
 ```
 
 ---
-
 class: center
 
+## Area de estudio
 
 
 
-&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotAreadeEstudio.jpg" width="400" height="600" /&gt;
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotAreadeEstudio.jpg" width="400" height="500" /&gt;
 
 
 ---
-## Grafico preliminar
+## Tracks
 
 Ver tracks
 
@@ -190,10 +197,8 @@ PlotTracks&lt;-ggplot()+
 
 ---
 
-## Grafico preliminar
+## Tracks
 Con el codigo anterior, generamos esto:
-
-
 &lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotTracks.jpg" width="600" height="400" /&gt;
 
 
@@ -388,7 +393,7 @@ TablaCompleta %&gt;%
 
 ---
 
-Codigo para figura
+## Codigo para figura
 
 
 ```r
@@ -409,7 +414,7 @@ PlotBuceos&lt;-ggplot(TablaCompleta, aes(x=Month, y=Depth,fill=Sex))+
 
 ---
 
-## Figura 
+## Figura preliminar: buceos
 
 
 &lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotBuceos.jpg" width="600" height="400" /&gt;
@@ -425,17 +430,19 @@ TablaCompleta %&gt;%
 ```
 
 ```
-## # A tibble: 4 x 4
-## # Groups:   Sex [2]
-##   Sex   Month  mean    sd
-##   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 F     Apr    17.4  3.66
-## 2 F     Jul    34.8 14.8 
-## 3 M     Apr    20.6  3.39
-## 4 M     Jul    57.2 21.4
+# A tibble: 4 x 4
+# Groups:   Sex [2]
+  Sex   Month  mean    sd
+  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 F     Apr    17.4  3.66
+2 F     Jul    34.8 14.8 
+3 M     Apr    20.6  3.39
+4 M     Jul    57.2 21.4 
 ```
 
 ---
+
+### Codigo figura
 
 ```r
 PlotDistancias&lt;-ggplot(TablaCompleta, aes(x=Month, y=Km,fill=Sex))+
@@ -455,18 +462,18 @@ PlotDistancias&lt;-ggplot(TablaCompleta, aes(x=Month, y=Km,fill=Sex))+
 ```
 
 ---
-
+## Figura preliminar: distancias
 
 
 &lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotDistancias.jpg" width="600" height="400" /&gt;
 
 ---
 
-## Estadisticos
+# Estadisticos
 
 
-Variables a probar: profundidad del buceo y distancia maxima
-Factores: Sexo y Meses (temporadas de pesca).
+- Variables a probar: profundidad del buceo y distancia maxima
+- Factores: Sexo y Meses (temporadas de pesca).
 
 
 
@@ -475,31 +482,37 @@ str(TablaCompleta)
 ```
 
 ```
-## tibble [20 x 8] (S3: tbl_df/tbl/data.frame)
-##  $ TagID : chr [1:20] "AD01" "AD02" "AD03" "AD04" ...
-##  $ Year  : num [1:20] 2017 2017 2017 2017 2017 ...
-##  $ Month : chr [1:20] "Apr" "Apr" "Apr" "Apr" ...
-##  $ Sex   : chr [1:20] "M" "M" "F" "F" ...
-##  $ Weight: num [1:20] 2399 2392 2450 2609 2664 ...
-##  $ Wing  : num [1:20] 35 35.2 35.5 34.8 36 34.6 35.1 36 36.1 36.8 ...
-##  $ Km    : num [1:20] 20.9 18.5 18.3 14.7 23 ...
-##  $ Depth : num [1:20] 5.67 0 5.87 0.28 8.83 ...
+tibble [20 x 8] (S3: tbl_df/tbl/data.frame)
+ $ TagID : chr [1:20] "AD01" "AD02" "AD03" "AD04" ...
+ $ Year  : num [1:20] 2017 2017 2017 2017 2017 ...
+ $ Month : chr [1:20] "Apr" "Apr" "Apr" "Apr" ...
+ $ Sex   : chr [1:20] "M" "M" "F" "F" ...
+ $ Weight: num [1:20] 2399 2392 2450 2609 2664 ...
+ $ Wing  : num [1:20] 35 35.2 35.5 34.8 36 34.6 35.1 36 36.1 36.8 ...
+ $ Km    : num [1:20] 20.9 18.5 18.3 14.7 23 ...
+ $ Depth : num [1:20] 5.67 0 5.87 0.28 8.83 ...
 ```
 
 ---
 
-# Anovas de dos vias
+# Estadisticos
 
-De acuerdo a nuestros objetivos lo mejor es usar una ANOVA de dos dias.
-Para evaluar el efecto de dos variables (sexo y veda) en una variable de respuesta (maximo de buceos y distancia maxima de los viajes, respectivamente). 
+- De acuerdo a nuestros objetivos lo mejor es usar una ANOVA de dos vias. 
+- Para evaluar el efecto de dos variables (sexo y veda) en una variable de respuesta (maximo de buceos y distancia maxima de los viajes, respectivamente). 
+
+--
 
 Hipotesis a probar.
-1. No hay diferencias en medias de Sexo
-2. No hay diferencias en medias de Veda
+1. No hay diferencias en medias de Sexo.
+2. No hay diferencias en medias de Veda.
 3. No hay interaccion entre Sexo y Veda.
 
-Factores: Sexo, Veda
+--
 
+Factores: Sexo, Veda
+--
+
+Tamaño de muestra.
 Nuestras muestras estan balanceadas:
  
 
@@ -508,10 +521,10 @@ table(TablaCompleta$Month,TablaCompleta$Sex)
 ```
 
 ```
-##      
-##       F M
-##   Apr 5 5
-##   Jul 5 5
+     
+      F M
+  Apr 5 5
+  Jul 5 5
 ```
 
 ---
@@ -519,60 +532,46 @@ table(TablaCompleta$Month,TablaCompleta$Sex)
 ## Profundidad de buceo
 
 ```r
-modeloD&lt;-aov(formula=Depth~Sex+Month,data=TablaCompleta)
-summary(modeloD)
-```
-
-```
-##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
-## Sex          1   26.1    26.1   1.205    0.289    
-## Month        1 1659.9  1659.9  76.504 1.71e-07 ***
-## Residuals   16  347.1    21.7                     
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 1 observation deleted due to missingness
-```
-
-
-Con la interaccion
-
-```r
 Mis_interacciones&lt;-aov(Depth~Sex+Month+Sex:Month, data=TablaCompleta)
 summary(Mis_interacciones)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
-## Sex          1   26.1    26.1   1.223    0.286    
-## Month        1 1659.9  1659.9  77.646 2.57e-07 ***
-## Sex:Month    1   26.5    26.5   1.239    0.283    
-## Residuals   15  320.7    21.4                     
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 1 observation deleted due to missingness
+            Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+Sex          1   26.1    26.1   1.223    0.286    
+Month        1 1659.9  1659.9  77.646 2.57e-07 ***
+Sex:Month    1   26.5    26.5   1.239    0.283    
+Residuals   15  320.7    21.4                     
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+1 observation deleted due to missingness
 ```
 
+--
 
-El tiempo de muestreo es significativo, independientemente del sexo.
+El tiempo (mes) de muestreo es significativo, independientemente del sexo.
 
 ---
 
 ### Supuestos
 
-Homogeneidad de las varianzas y normalidad
+Paquete
 
 
+Homogeneidad de las varianzas
 
 ```r
 leveneTest(Depth~Sex:Month, data=TablaCompleta)
 ```
 
 ```
-## Levene's Test for Homogeneity of Variance (center = median)
-##       Df F value Pr(&gt;F)
-## group  3  0.4533 0.7188
-##       15
+Levene's Test for Homogeneity of Variance (center = median)
+      Df F value Pr(&gt;F)
+group  3  0.4533 0.7188
+      15               
 ```
+
+Normalidad de los residuales
 
 ```r
 aov_residuals &lt;- residuals(object = Mis_interacciones)
@@ -580,47 +579,41 @@ shapiro.test(x = aov_residuals )
 ```
 
 ```
-## 
-## 	Shapiro-Wilk normality test
-## 
-## data:  aov_residuals
-## W = 0.93973, p-value = 0.2607
-```
 
+	Shapiro-Wilk normality test
+
+data:  aov_residuals
+W = 0.93973, p-value = 0.2607
+```
 
 
 ```r
-plot(Mis_interacciones,1)
+#plot(Mis_interacciones,1)
+#plot(Mis_interacciones,2)
 ```
-
-![](CormoranesGrupo6_files/figure-html/normalidad-1.png)&lt;!-- --&gt;
-
-```r
-plot(Mis_interacciones,2)
-```
-
-![](CormoranesGrupo6_files/figure-html/normalidad-2.png)&lt;!-- --&gt;
 
 ---
 
 ### Anovas de dos vias
-
+Para las distancias lo transformamos a escala logaritmica para la normalidad de los residuales. 
 
 ```r
-modeloKm&lt;-aov(formula=Km~Sex*Month,data=TablaCompleta)
+modeloKm&lt;-aov(formula=log(Km)~Sex*Month,data=TablaCompleta)
 summary(modeloKm)
 ```
 
 ```
-##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
-## Sex          1    894     894   5.187 0.037835 *  
-## Month        1   3583    3583  20.786 0.000376 ***
-## Sex:Month    1    432     432   2.507 0.134174    
-## Residuals   15   2586     172                     
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 1 observation deleted due to missingness
+            Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+Sex          1  0.700   0.700   8.199   0.0118 *  
+Month        1  3.182   3.182  37.295 2.01e-05 ***
+Sex:Month    1  0.142   0.142   1.663   0.2167    
+Residuals   15  1.280   0.085                     
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+1 observation deleted due to missingness
 ```
+
+--
 
 El tiempo de muestreo es significativo y sexo tambien pero no hay interaccion entre ambos.
 
@@ -632,29 +625,17 @@ El tiempo de muestreo es significativo y sexo tambien pero no hay interaccion en
 Homogeneidad de las varianzas
 
 ```r
-leveneTest(Km~Sex:Month, data=TablaCompleta)
+leveneTest(log(Km)~Sex:Month, data=TablaCompleta)
 ```
 
 ```
-## Levene's Test for Homogeneity of Variance (center = median)
-##       Df F value Pr(&gt;F)
-## group  3  1.6434 0.2216
-##       15
+Levene's Test for Homogeneity of Variance (center = median)
+      Df F value Pr(&gt;F)
+group  3  2.3255 0.1161
+      15               
 ```
-
-```r
-plot(modeloKm,1)
-```
-
-![](CormoranesGrupo6_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
 
 Normalidad
-
-```r
-plot(modeloKm,2)
-```
-
-![](CormoranesGrupo6_files/figure-html/normalidad km-1.png)&lt;!-- --&gt;
 
 ```r
 aov_residuals &lt;- residuals(object = modeloKm)
@@ -662,11 +643,11 @@ shapiro.test(x = aov_residuals)
 ```
 
 ```
-## 
-## 	Shapiro-Wilk normality test
-## 
-## data:  aov_residuals
-## W = 0.85865, p-value = 0.009307
+
+	Shapiro-Wilk normality test
+
+data:  aov_residuals
+W = 0.95438, p-value = 0.4674
 ```
 
 ---
@@ -703,6 +684,7 @@ Ploteame&lt;-function(Datos=Datos){
 
 ---
 
+# Crear un mapa por sexo y mes
 Agregar medidas a Tracks
 
 ```r
@@ -740,6 +722,8 @@ MapaD&lt;-Ploteame(Datos=MD)+
 
 ---
 
+# Unir mapas
+
 Paquete
 
 ```r
@@ -763,28 +747,47 @@ class: center
 
 ---
 
+class: center
+
 # Conclusiones
+
 - Las hembras bucean mas profundo o viajan mas lejos que los machos?
-Estos analisis preliminares sugieren que **no** hay diferencias significativas entre hembras y machos pero **si hay diferencias** entre antes y despues de la veda.
+- Estos analisis preliminares sugieren que **no** hay diferencias significativas en la profundidad de buceo entre hembras y machos pero **si hay diferencias** entre antes y despues de la veda.
+
+
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotBuceos.jpg" width="400" height="300" /&gt;
+
+
+---
+class: center
+
+# Conclusiones
 
 - Los cormoranes bucean mas profundo o viajan mas lejos en Julio comparado con Abril?
-Estos analisis preliminares sugieren que **si** hay diferencias significativas entre hembras y machos y entre antes y despues de la veda.
+- Estos analisis preliminares sugieren que **si** hay diferencias significativas entre hembras y machos y entre antes y despues de la veda. Los machos viajan mas lejos que las hembras y ambos viajan mas lejos en Julio.
 
-.pull-left[
-&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotBuceos.jpg" width="300" height="200" /&gt;
-]
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/MapasSexoVeda.jpg" width="500" height="300" /&gt;
 
-.pull-right[
-&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotDistancias.jpg" width="300" height="200" /&gt;
-] 
+Nota: ***Son solo maximos, no hicimos correccion de ceros ni calculamos promedios por individuo***
 
-***Son solo maximos, no hicimos correccion de ceros ni calculamos promedios por individuo***
+
 
 ---
 
-Todo el material en:
+## Todo el material en
 
 https://github.com/MiriamLL/Curso_Cormoranes
+
+--
+
+## Gracias 
+
+&lt;img src="https://scontent.fham2-1.fna.fbcdn.net/v/t1.0-9/125369794_1017592122068396_8216067479374620034_o.png?_nc_cat=107&amp;ccb=2&amp;_nc_sid=09cbfe&amp;_nc_ohc=Zs_v8fI_zW8AX-BDdkX&amp;_nc_ht=scontent.fham2-1.fna&amp;oh=a34c8fc4c28cc3d838702576ed65b1a0&amp;oe=6033C883" width="300" height="200" /&gt;
+!
+
+
+
+😄
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
