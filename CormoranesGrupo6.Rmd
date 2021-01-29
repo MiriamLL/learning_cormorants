@@ -26,7 +26,7 @@ class: center, middle
 ## 1. Antecedentes
 
 - Los guanayes ***(Phalacrocorax bougainvillii)*** son considerados una de las especies de aves marinas más importante para la producción del guano en el Perú.  
--Esta especie se alimenta principalmente de anchoveta ***(Engraulis rigens)***, el cual es muy valorado para la pesca en el Perú por la gran cantidad de exportación.
+- Esta especie se alimenta principalmente de anchoveta ***(Engraulis rigens)***, el cual es muy valorado para la pesca en el Perú por la gran cantidad de exportación.
 -  Por lo que creemos que la temporada de pesca de anchoveta puede impactar su comportamiento alimenticio. 
 - Si hay menos recursos porque los captura la pesca o porque hacen que sea más complicado para las aves obtener su alimento.
 
@@ -43,7 +43,7 @@ class: center, middle
 
 - Conocer las diferencias que existen por sexos en las distancias recorridas y profundidades de buceo que realizan para alimentarse 
 - Esta información nos puede ayudar a mejorar las medidas de protección de la especie a corto y largo plazo. 
--Así como tener información de que sexo puede ser más vulnerable a la temporada de pesca y como esta practica puede afectar al forrageo de la colonia ubicada en la isla Lobos de Afuera.
+- Así como tener información de que sexo puede ser más vulnerable a la temporada de pesca y como esta practica puede afectar al forrageo de la colonia ubicada en la isla Lobos de Afuera.
 
 `r emo::ji("fish")`
 
@@ -572,7 +572,7 @@ Coincide en el tiempo en que los buceos son **menos** profundos, y los viajes de
 
 Datos de Global Fishing Watch para el area general donde se encuentra la colonia para el mes de **julio** (durante de la temporada de pesca)
 
-```{r, echo=FALSE, out.height=200}
+```{r, echo=FALSE, out.height=250}
 knitr::include_graphics('https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/GFW2.jpeg')
 ```
 
