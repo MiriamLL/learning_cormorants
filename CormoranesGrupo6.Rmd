@@ -597,13 +597,14 @@ Con este estudio **preliminar** encontramos que:
 `r emo::ji("fish")`
 `r emo::ji("fish")`
 `r emo::ji("fish")`
+
 ---
 
 class: inverse, center, middle
 
 Todo el material en:
 
- [Presentación](https://github.com/MiriamLL/Curso_Cormoranes)  
+ [Presentación](https://miriamll.github.io/Curso_Cormoranes/CormoranesGrupo6.html#1)  
  [Código](https://github.com/MiriamLL/Curso_Cormoranes/blob/main/CormoranesGrupo6.Rmd)  
 
 Gracias  
