@@ -5,7 +5,7 @@ author: "Alonso Huyhua, Carolina Meza y Miriam Lerma"
 date: "01-Febrero-2021"
 output:
   xaringan::moon_reader:
-    css: ["default","chocolate-fonts"]
+    css: ["default","tamu-fonts"]
     nature:
       highlightStyle: github
       highlightLines: true
@@ -25,9 +25,9 @@ class: center, middle
 
 ## 1. Antecedentes
 
-Los guanay ***(Phalacrocorax bougainvillii)*** se alimentan principalmente de anchoveta ***(Engraulis rigens)***
+Los guanayes ***(Phalacrocorax bougainvillii)*** se alimentan principalmente de anchoveta ***(Engraulis rigens)***
 
-```{r echo=FALSE, out.height=100, out.width= 200}
+```{r echo=FALSE, out.height=100}
 knitr::include_graphics("https://tumi.lamolina.edu.pe/infopes/wp-content/uploads/2018/06/anchoveta.jpg")
 ```
 
@@ -67,7 +67,7 @@ Se tomaron muestras de hembras y machos de guanay (n=20), antes (Abril) y durant
 
 Los datos se tomaron en la Isla Lobos de Afuera en Perú.
 
-```{r Paquetes2, warning=FALSE, message=FALSE, eval= TRUE, echo=FALSE}
+```{r Paquetes2, warning=FALSE, message=FALSE, echo=FALSE, eval= FALSE}
 #Paquetes
 library(emo)
 library(ggplot2)
@@ -76,23 +76,6 @@ library(tidyr)
 library(rnaturalearth)
 library(rnaturalearthdata)
 world <- ne_countries(scale = "medium", returnclass = "sf")
-```
-
-```{r Colonia, eval= FALSE, echo=FALSE}
-#Extraer cordenadas de la colonia
-MiColonia <- Tracks %>% 
-  summarise(Longitude = first(Longitude),Latitude  = first(Latitude), )
-```
-
-```{r Area de estudio, warning=FALSE, eval= FALSE, echo=FALSE}
-#Graficar area de estudio
-PlotAreadeEstudio<-ggplot()+
-    geom_sf(data = world) +
-    coord_sf(xlim = c(-85, -65), ylim = c(-30, 0), expand = FALSE)+
-    geom_point(data = MiColonia, aes(x = Longitude, y = Latitude), 
-               color = "black",fill="white",
-               size = 5,shape=21,stroke = 3)+
-  geom_text(aes(x=-75,y=-10),label = "PERU", size=5)+  theme_bw()
 ```
 
 ```{r echo=FALSE, out.height=400, out.width= 250}
@@ -115,16 +98,16 @@ class: center, middle
 ## 4. Metodología
 ### 4.1.1. Importar excels
 
-Con que tengan una carpeta con los excels del curso.
+Deben tener carpeta con los excels del curso.
 
 Usando estos paquetes:
-```{r Paquetes Datos, warning=FALSE, message=FALSE, eval=TRUE, echo=TRUE}
+```{r Paquetes Datos, warning=FALSE, message=FALSE, echo=TRUE, eval= FALSE}
 library(here)
 library(readxl)
 ```
 
 Siguiendo este código:
-```{r Unir excels, eval=TRUE, echo=TRUE}
+```{r Unir excels, echo=TRUE, eval= FALSE}
 MainFolder<-here()
 DataFolder<-paste0(MainFolder,'//0Excels')
 files_Cormorant <- list.files(DataFolder,
@@ -142,57 +125,63 @@ TracksCormoranes <- do.call("rbind",
 ### 4.1.2. Unir excels
 
 Quitamos los NA's
-```{r Nas, include=TRUE, eval=TRUE, echo=TRUE}
+```{r Nas, include=TRUE, echo=TRUE, eval= FALSE}
 TracksCormoranes <- TracksCormoranes[complete.cases(TracksCormoranes$Latitude),]
 ```
 
 Renombrar para más rápido
-```{r Renombrar, eval= TRUE, echo=TRUE}
+```{r Renombrar,echo=TRUE, eval= FALSE}
 Tracks<-TracksCormoranes
 ```
 
-Queda así
-```{r Tabla Tracks,comment="", eval= TRUE, echo=TRUE}
-str(Tracks)
+```{r Colonia, echo=FALSE, eval= FALSE}
+#Extraer cordenadas de la colonia
+MiColonia <- Tracks %>% 
+  summarise(Longitude = first(Longitude),Latitude  = first(Latitude), )
+```
+
+```{r Area de estudio, warning=FALSE, echo=FALSE, eval= FALSE}
+#Graficar area de estudio
+PlotAreadeEstudio<-ggplot()+
+    geom_sf(data = world) +
+    coord_sf(xlim = c(-85, -65), ylim = c(-30, 0), expand = FALSE)+
+    geom_point(data = MiColonia, aes(x = Longitude, y = Latitude), 
+               color = "black",fill="white",
+               size = 5,shape=21,stroke = 3)+
+  geom_text(aes(x=-75,y=-10),label = "PERU", size=5)+  theme_bw()
 ```
 
 ---
 
 ## 4. Metodología
-### 4.2.1. Parametros del viaje
+### 4.2.1. Parámetros del viaje
 Máximos de buceo 
-```{r Convertir buceos, echo=TRUE, eval= TRUE}
+```{r Convertir buceos, echo=TRUE, eval= FALSE}
 Tracks$Depth<-as.numeric(Tracks$Depth) 
 ```
 
 Calcular los máximos de buceo de cada individuo
-```{r ProfundidadBuceos, echo=TRUE, eval= TRUE}
+```{r ProfundidadBuceos, echo=TRUE, eval= FALSE}
 ProfundidadBuceos<-Tracks %>%
   group_by(TagID) %>%
    summarise_at(c("Depth"), max, na.rm = TRUE) 
 ```
 
-Queda así
-```{r ProfundidadBuceoTabla, echo=TRUE, eval= TRUE}
-head(ProfundidadBuceos,8)
-```
-
-
 ---
 
 ## 4. Metodología
-### 4.2.2. Parametros del viaje
+### 4.2.2. Parámetros del viaje
 Distancias máximas
 
 Paquetes
-```{r Paquetes espaciales, echo=TRUE, eval= TRUE, warning=FALSE, message=FALSE}
+```{r Paquetes espaciales, echo=TRUE, warning=FALSE, message=FALSE, eval= FALSE}
 library(geosphere) #distm
 library(rgeos) #coordinates
 ```
 
 Transformamos a datos espaciales
 - Los tracks:
-```{r TracksSp, echo=TRUE, eval= TRUE}
+```{r TracksSp, echo=TRUE, eval= FALSE}
 TracksSp<-Tracks
 TracksSp$lat<-TracksSp$Latitude
 TracksSp$lon<-TracksSp$Longitude
@@ -200,48 +189,41 @@ coordinates(TracksSp)<-~lon+lat
 ```
 
 - La colonia:
-```{r Colonia2, eval= TRUE, echo=FALSE}
+```{r Colonia2, echo=FALSE, eval= FALSE}
 MiColonia <- Tracks %>% 
   summarise(Longitude = first(Longitude),Latitude  = first(Latitude), )
 ```
 
-```{r ColoniaSp, echo=TRUE, eval= TRUE}
+```{r ColoniaSp, echo=TRUE, eval= FALSE}
 LaColonia<- SpatialPoints(cbind(MiColonia$Longitude,MiColonia$Latitude)) 
 ```
 
 ---
 
 ## 4. Metodología
-### 4.2.2. Parametros del viaje
+### 4.2.2. Parámetros del viaje
 Distancias máximas
 
-Calculamos distancia en metros y transformamos a kilometros
-```{r Metros, echo=TRUE, eval= TRUE, warning=FALSE}
+Calculamos distancia en metros y transformamos a kilómetros
+```{r Metros, echo=TRUE, warning=FALSE, eval= FALSE}
 Metros<-(distm(TracksSp,MiColonia,fun = distHaversine))
 TracksDist<-cbind(Tracks,Metros)
 TracksDist$Km<-TracksDist$Metros/1000
 ```
+Nuestra metodología para esta parte no fue la más rápida `r emo::ji("clock")`.
 
-```{r Tabla, echo=TRUE, eval= TRUE}
-head(TracksDist)
-```
 
 ---
 
 ## 4. Metodología
-### 4.2.2. Parametros del viaje
+### 4.2.2. Parámetros del viaje
 Distancias máximas
 
-Calcular la distancia maxima de cada individuo
-```{r DistanciaColonia, echo=TRUE, eval= TRUE}
+Calcular la distancia máxima de cada individuo
+```{r DistanciaColonia, echo=TRUE, eval= FALSE}
 DistanciaColonia<-TracksDist %>%
   group_by(TagID) %>%
    summarise_at(c("Km"), max, na.rm = TRUE) 
-```
-
-Queda así
-```{r DistanciaColonia2,echo=TRUE, eval= TRUE}
-head(DistanciaColonia,8)
 ```
 
 ---
@@ -250,22 +232,16 @@ head(DistanciaColonia,8)
 ### 4.3.1. Crear tabla
 
 Importar datos de medidas
-```{r Medidas, echo=TRUE, eval= TRUE, warning=FALSE}
+```{r Medidas, echo=TRUE, warning=FALSE, eval= FALSE}
 Medidas<-read_excel(here("./1Datos/Data_cormorantX.xlsx"))
 colnames(Medidas)[1]<-'TagID'
 ```
 
 Unir medidas con distancias máximas y profundidades de buceo
-```{r Unir tablas, echo=TRUE, eval= TRUE}
+```{r Unir tablas, echo=TRUE, eval= FALSE}
 TablaDistancias<-left_join(Medidas,DistanciaColonia,by='TagID')
 TablaCompleta<-left_join(TablaDistancias,ProfundidadBuceos,by='TagID')
 ```
-
-Tabla completa
-```{r Ver tabla, echo=TRUE, eval= TRUE, include=TRUE}
-head(TablaCompleta)
-```
-
 
 ---
 
@@ -273,7 +249,7 @@ head(TablaCompleta)
 ### 4.4.1. Promedios 
 Máximos de buceo
 
-```{r Tabla Completa, echo=TRUE, eval= TRUE, include=TRUE, message=FALSE, warning=FALSE}
+```{r Tabla Completa, echo=TRUE, message=FALSE, warning=FALSE, include=TRUE, eval= FALSE}
 TablaCompleta %>%
   group_by(Sex,Month) %>%
   summarise_at(c("Depth"), funs(mean, sd), na.rm = TRUE) 
@@ -282,13 +258,13 @@ TablaCompleta %>%
 ---
 
 ## 4. Metodología
-### 4.4.1. Promedios 
+### 4.4.1. Figura
 Máximos de buceo
 
 Código para figura
-```{r PlotBuceos, include=TRUE, warning=FALSE, eval= TRUE, echo=TRUE}
+```{r PlotBuceos, include=TRUE, warning=FALSE,echo=TRUE, eval= FALSE}
 PlotBuceos<-ggplot(TablaCompleta, aes(x=Month, y=Depth,fill=Sex))+
-  xlab("Temporada de pesca")+ylab("Profundidad de buceo maxima \n (m)")+
+  xlab("Temporada de pesca")+ylab("Profundidad de buceo máxima \n (m)")+
   geom_boxplot()+
     scale_fill_manual(values=c("#f4a261","#2a9d8f","#f4a261","#2a9d8f")) +
   theme_classic()+
@@ -305,11 +281,10 @@ PlotBuceos<-ggplot(TablaCompleta, aes(x=Month, y=Depth,fill=Sex))+
 ---
 
 ## 4. Metodología
-### 4.4.1. Promedios 
+### 4.4.1. Figura
 Máximos de buceo
 
-Figura preliminar
-```{r, warning=FALSE, eval=FALSE, include=FALSE, echo=FALSE}
+```{r, warning=FALSE, include=FALSE, echo=FALSE, eval= FALSE}
 #ResultsFolder<-here::here("3Results")
 #PlotBuceos
 #ggsave("PlotBuceos.jpg",path = ResultsFolder,width = 8, height = 5, units = "in")
@@ -325,7 +300,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormor
 ### 4.4.2. Promedios 
 Distancias máximas
 
-```{r PromedioBuceosTabla, echo=TRUE, eval= TRUE, include=TRUE, message=FALSE, warning=FALSE, comment=''}
+```{r PromedioBuceosTabla, echo=TRUE, include=TRUE, message=FALSE, warning=FALSE, comment='', eval= FALSE}
 TablaCompleta %>%
   group_by(Sex,Month) %>%
   summarise_at(c("Km"), funs(mean, sd), na.rm = TRUE) 
@@ -334,11 +309,11 @@ TablaCompleta %>%
 ---
 
 ## 4. Metodología
-### 4.4.2. Promedios 
+### 4.4.2. Figura
 Distancias máximas
 
 Código figura
-```{r PlotDistanciasKm, echo=TRUE, eval= TRUE, include=TRUE,message=FALSE, warning=FALSE}
+```{r PlotDistanciasKm, echo=TRUE,include=TRUE,message=FALSE, warning=FALSE, eval= FALSE}
 PlotDistancias<-ggplot(TablaCompleta, aes(x=Month, y=Km,fill=Sex))+
   geom_boxplot()+
   xlab("Temporada de pesca")+ylab("Distancia de la colonia \n (m)")+
@@ -358,11 +333,10 @@ PlotDistancias<-ggplot(TablaCompleta, aes(x=Month, y=Km,fill=Sex))+
 ---
 
 ## 4. Metodología
-### 4.4.2. Promedios 
+### 4.4.2. Figura
 Distancias máximas
 
-Figura preliminar: distancias
-```{r,message=FALSE, warning=FALSE, include=FALSE,eval=FALSE, echo=FALSE}
+```{r,message=FALSE, warning=FALSE, include=FALSE,echo=FALSE, eval= FALSE}
 #ResultsFolder<-here::here("3Results")
 #PlotDistancias
 #ggsave("PlotDistancias.jpg",path = ResultsFolder,width = 8, height = 5, units = "in")
@@ -379,13 +353,13 @@ knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormor
 Distancias máximas
 
 Función para crear mapas
-```{r plots por individiduos}
+```{r plots por individiduos, eval= FALSE}
 Ploteame<-function(Datos=Datos){
   MiPlot<-ggplot()+
     geom_sf(data = world) +
     coord_sf(xlim = c(-81, -80), ylim = c(-7.5, -6.5), expand = FALSE)+
     geom_path(data = Datos, aes(x = Longitude, y = Latitude, color=TagID), size=1)+
-  theme_bw()+
+    theme_bw()+
     theme(panel.border = element_rect(linetype = "solid", colour = "black", size=1.5),
         axis.title = element_text(size=8),axis.ticks.length = unit(3, "pt"),
         axis.text.x =  element_text(size=8),axis.text.y =  element_text(size=8),
@@ -396,7 +370,7 @@ Ploteame<-function(Datos=Datos){
         legend.position='top') + 
    labs(x = "Longitude", y="Latitude")+
    geom_point(data = MiColonia, mapping = aes(x = Longitude, y = Latitude), 
-             color = "black", fill="white", size = 10,shape=21,stroke = 3)
+             color = "black", fill="white", size = 2,shape=21,stroke = 3)
   return(MiPlot)
 }
 ```
@@ -404,34 +378,33 @@ Ploteame<-function(Datos=Datos){
 ---
 
 ## 4. Metodología
-### 4.4.2. Promedios 
-Crear un mapa por sexo y mes
+### 4.4.2. Mapa por sexo y mes
 
 Agregar medidas a Tracks
-```{r unir tablas por id}
+```{r unir tablas por id, eval= FALSE}
 TracksC<-left_join(Tracks,Medidas,by='TagID')
 ```
 
 Creamos mapas por sexo y etapa (usando la funcion de 'Ploteame') 
-```{r FA, eval=TRUE}
+```{r FA,  eval= FALSE}
 FA<-subset(TracksC,TracksC$Sex=='F' & TracksC$Month=='Apr')
 MapaA<-Ploteame(Datos=FA)+
   ggtitle('Hembras Abril')
 ```
 
-```{r FD, eval=TRUE}
+```{r FD, eval= FALSE}
 FD<-subset(TracksC,TracksC$Sex=='F' & TracksC$Month=='Jul')
 MapaB<-Ploteame(Datos=FD)+
   ggtitle('Hembras Julio')
 ```
 
-```{r MA, eval=TRUE}
+```{r MA, eval= FALSE}
 MA<-subset(TracksC,TracksC$Sex=='M' & TracksC$Month=='Apr')
 MapaC<-Ploteame(Datos=MA)+
   ggtitle('Machos Abril')
 ```
 
-```{r MD, eval=TRUE}
+```{r MD, eval= FALSE}
 MD<-subset(TracksC,TracksC$Sex=='M' & TracksC$Month=='Jul')
 MapaD<-Ploteame(Datos=MD)+
   ggtitle('Machos Julio')
@@ -443,17 +416,17 @@ MapaD<-Ploteame(Datos=MD)+
 ### 4.4.2. Promedios 
 
 Paquete
-```{r cowplot, warning=FALSE, echo=TRUE}
+```{r cowplot, warning=FALSE, echo=TRUE, eval= FALSE}
 library(cowplot)
 ```
 
 Unir plot
-```{r sexovedaplot, eval=TRUE, echo=TRUE}
+```{r sexovedaplot, echo=TRUE, eval= FALSE}
 MapasSexoVeda<-plot_grid(MapaA,MapaB,
                          MapaC,MapaD,ncol = 2, nrow=2)
 ```
 
-```{r, eval=FALSE,include=FALSE, echo=TRUE}
+```{r, include=FALSE, echo=TRUE, eval= FALSE}
 #ResultsFolder<-here::here("3Results")
 #MapasSexoVeda
 #ggsave("MapasSexoVeda.jpg",path = ResultsFolder,width = 8, height = 8, units = "in")
@@ -462,11 +435,9 @@ MapasSexoVeda<-plot_grid(MapaA,MapaB,
 ---
 
 ## 4. Metodología
-### 4.4.2. Promedios 
+### 4.4.2. Tracks por individuos  
 
-Tracks por individuos  
-
-```{r echo=FALSE, out.height=400, out.width= 500}
+```{r echo=FALSE, out.height=400}
 knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/MapasSexoVeda.jpg")
 ```
 
@@ -474,57 +445,54 @@ knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormor
 ---
 
 ## 4. Metodología
-### 4.5.1. Estadisticos
+### 4.5.1. Estadísticos
 
-- De acuerdo a nuestros objetivos lo mejor es usar una ANOVA de dos vías. 
-- Para evaluar el efecto de dos factores (Sexo y Temporada de pesca) en una variable de respuesta (maximo de buceos y distancia maxima de los viajes, respectivamente). 
-
-
+- ANOVA de dos vías. 
+- Para evaluar el efecto de dos factores (Sexo y Temporada de pesca) en una variable de respuesta (máximo de buceos y distancia máxima de los viajes, respectivamente). 
 
 
 
-Nota: ***Son solo máximos, no hicimos correccion de ceros ni calculamos parametros por viaje por individuo***
+
+
+Nota: ***Son solo máximos, no hicimos corrección de ceros ni calculamos parámetros por viaje por individuo***
 
 ---
 
 ## 4. Metodología
-### 4.5.1. Estadisticos
+### 4.5.1. Estadísticos
 
 Máximos de buceo
 
-Modelo
-```{r interacciones depth, comment=''}
+```{r interacciones depth, comment='', eval= FALSE}
 ModeloBuceos<-aov(Depth~Sex+Month+Sex:Month, data=TablaCompleta)
 summary(ModeloBuceos)
 ```
 
---
-
-La **temporada de pesca** es significativo, independientemente del **sexo**.
+**No** hubo diferencias significativas en los buceos entre **hembras y machos** (ANOVA F1,15=1.22, p = 0.29), pero **ambos sexos bucearon más profundo en Julio**, durante la temporada de pesca (ANOVA F1,15=77.65, p < 0.01). La interaccion entre los factores sexo y temporada de pesca no fue significativa (F1,15=1.24, p = 0.28). 
 
 ---
 
 ## 4. Metodología
-### 4.5.1. Estadisticos
+### 4.5.1. Estadísticos
 
-Se cumplen los supuestos
+Se cumplieron los supuestos
 
-```{r,warning=FALSE, include=FALSE, echo=TRUE}
+```{r,warning=FALSE, include=FALSE, echo=TRUE, eval= FALSE}
 library(car) #leveneTest
 ```
 
 - Homogeneidad de las varianzas
-```{r homogeneidad, comment='', echo=TRUE}
+```{r homogeneidad, comment='', echo=TRUE, eval= FALSE}
 leveneTest(Depth~Sex:Month, data=TablaCompleta)
 ```
 
 - Normalidad de los residuales
-```{r normalidad, comment='', echo=TRUE}
+```{r normalidad, comment='', echo=TRUE, eval= FALSE}
 aov_residuals <- residuals(object = ModeloBuceos)
 shapiro.test(x = aov_residuals )
 ```
 
-```{r normalidad2, echo=FALSE}
+```{r normalidad2, echo=FALSE, eval= FALSE}
 #plot(Mis_interacciones,1)
 #plot(Mis_interacciones,2)
 ```
@@ -532,34 +500,32 @@ shapiro.test(x = aov_residuals )
 ---
 
 ## 4. Metodología
-### 4.5.1. Estadisticos
+### 4.5.1. Estadísticos
 Distancias máximas
 
-Para las distancias lo transformamos a escala logaritmica para mejorar la normalidad de los residuales. 
-```{r anova km, comment='', echo=TRUE}
+Para las distancias lo transformamos a escala logarítmica para mejorar la normalidad de los residuales. 
+```{r anova km, comment='', echo=TRUE, eval= FALSE}
 modeloKm<-aov(formula=log(Km)~Sex*Month,data=TablaCompleta)
 summary(modeloKm)
 ```
 
---
-
-La **temporada de pesca** es significativo y **sexo** tambien, pero no hay interacción entre ambos.
+En las distancia máximas de la colonia, la interaccion sexo y temporada de pesca no fue significativo (ANOVA F1,15=1.66, p = 0.21). Pero **los machos viajan significativamente más lejos de la colonia que las hembras** (ANOVA F1,15=8.19 p = 0.01), y **ambos sexos viajan más lejos en Julio** (ANOVA F1,15=27.29, p < 0.01), durante la temporada de pesca.
 
 
 ---
 
-## 4. Metodologia
-### 4.5.1. Estadisticos
+## 4. Metodología
+### 4.5.1. Estadísticos
 
 Se cumplen los supuestos
 
 - Homogeneidad de las varianzas
-```{r, comment=''}
+```{r, comment='', eval= FALSE}
 leveneTest(log(Km)~Sex:Month, data=TablaCompleta)
 ```
 
 - Normalidad de los residuales
-```{r normalidad km, comment=''}
+```{r normalidad km, comment='', eval= FALSE}
 aov_residuals <- residuals(object = modeloKm)
 shapiro.test(x = aov_residuals)
 ```
@@ -569,52 +535,20 @@ shapiro.test(x = aov_residuals)
 ---
 
 ## 5. Discusión
-### 5.1. Máximos de buceo
+### Parámetros del viaje
 
-Estos analisis preliminares sugieren que **no** hay diferencias significativas entre hembras y machos en las profundidades de buceo pero **si hay diferencias** entre antes y durante la temporada de pesca.   
+- Por un lado:  
+Un efecto del sexo, donde los machos viajan en general **más lejos**, pero no más profundo que las hembras. Ya sea por que consumen diferentes presas, por competencia entre sexos, o por diferentes roles durante la reproducción.  
 
-Ambos sexos bucean **mas profundo** durante la temporada de pesca.  
-
-
-```{r echo=FALSE, out.height=300, out.width= 400}
-knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotBuceos.jpg")
-```
-
----
-
-## 5. Discusión
-### 5.1. Máximos de buceo
-
-Lo cual apuntaria a:  
+- Por el otro lado:  
+Los guanay viajando **más lejos** y buceando **más profundo** en julio (durante la temporada de pesca) en comparacion con Abril (antes de la temporada de pesca) sugiere:  
 a) Cambio en la dieta.  
-b) Cambio en las condiciones ambientales, que obliga a los cormoranes a bucear mas profundo.   
-c) Un efecto de la temporada de pesca, tal vez un decremento en la disponibilidad de alimento cuando entran en competencia con las pesquerias, que obliga a los cormoranes a bucear mas profundo.  
+b) Cambio en las condiciones ambientales.  
+c) Un efecto de la temporada de pesca
 
----
-
-
-## 5. Discusión
-### 5.1. Distancias máximas
-
-Estos analisis preliminares sugieren que **si** hay diferencias significativas en lasdistancias maximas que viajan entre hembras y machos, y entre durante y despues de la veda.  
-
-Los machos viajan **mas lejos** que las hembras, y ambos viajan mas lejos en julio.
-
-```{r echo=FALSE, out.height=300, out.width= 400}
-knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/MapasSexoVeda.jpg")
-```
-
----
-
-## 5. Discusión
-### 5.1. Distancias máximas
-
-Lo cual sugiere que hay:  
-Un efecto del sexo, donde los machos viajan en general mas lejos que las hembras, por que consumen diferentes presas, por competencia entre sexos, o por diferentes roles durante la reproduccion.  
-
-a) Cambio en la dieta, por especies que se encuentran mas lejos de la colonia.  
-b) Cambio en las condiciones ambientales que afecten la disponibilidad de presas entre abril y julio, que obliga a los cormoranes a viajar mas lejos.  
-c) Un efecto de la temporada de pesca, tal vez un decremento en la disponibilidad de alimento que obliga a los cormoranes a viajar mas lejos.
+`r emo::ji("fish")`
+`r emo::ji("fish")`
+`r emo::ji("fish")`
 
 
 ---
@@ -622,13 +556,13 @@ c) Un efecto de la temporada de pesca, tal vez un decremento en la disponibilida
 ## 5. Discusión
 ### 5.2. Antes de la temporada de pesca
 
-Datos de Global Fishing Watch para el area general donde se encuentra la colonia para el mes de **abril** (antes de la temporada de pesca)
+Datos de Global Fishing Watch para el área general donde se encuentra la colonia para el mes de **abril** (antes de la temporada de pesca)
 
-```{r, echo=FALSE, out.height=250, out.width= 500}
+```{r, echo=FALSE, out.height=200}
 knitr::include_graphics('https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/GFW1.jpeg')
 ```
 
-Coincide en el tiempo en que los buceos son **menos** profundos, y los viajes de los cormoranes **más cortos**.
+Coincide en el tiempo en que los buceos son **menos** profundos, y los viajes de los guanayes **más cortos**.
 
 ---
 
@@ -637,61 +571,47 @@ Coincide en el tiempo en que los buceos son **menos** profundos, y los viajes de
 
 Datos de Global Fishing Watch para el area general donde se encuentra la colonia para el mes de **julio** (durante de la temporada de pesca)
 
-```{r, echo=FALSE, out.height=250, out.width= 500}
+```{r, echo=FALSE, out.height=200}
 knitr::include_graphics('https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/GFW2.jpeg')
 ```
 
-Coincide en el tiempo en que los buceos son **más profundos**, y los viajes de los cormoranes **más largos**.
+Coincide en el tiempo en que los buceos son **más profundos**, y los viajes de los guanayes **más largos**.
 
 --
 
-Es claro que el esfuerzo de pesca es mayor en Julio, y por lo tanto una razon potencial que puede explicar el cambio en el comportamiento de los cormoranes. 
+Es claro que el esfuerzo de pesca es mayor en Julio, y por lo tanto una razón potencial que puede explicar el cambio en el comportamiento de los guanayes. 
 
 ---
 
 # 6. Conclusiones
 
-Encontramos que:
+Con este estudio **preliminar** encontramos que:
 
-
-- No existen diferencias entre hembras y machos en las profundidades maximas del buceo, pero ambos sexos bucean mas profundo durante la temporada de pesca.
+- Hembras y machos se alimentan en diferentes áreas, pero a profundidades similares.
 
 --
 
-- Hay diferencias las distancias de la colonia, los machos viajan mas lejos que las hembras antes y durante la temporada de pesca y ambos sexos viajan mayores distancias durante la temporada de pesca. 
+- Queda para el futuro investigar si las diferencias antes y durante la pesca se deben a algún cambio en las condiciones ambientales que disminuye el recurso y obliga a los guanayes a viajar más lejos y más profundo o si existen cambios en la dieta.  
+- No obstante, este estudio preliminar sugiere que hay un efecto de la pesca en el comportamiento de los guanayes.
 
-
+`r emo::ji("fish")`
+`r emo::ji("fish")`
+`r emo::ji("fish")`
 ---
 
-# 6. Conclusiones
+class: inverse, center, middle
 
-- Esto sugiere que los sexos se alimentan en diferentes areas, pero a profundidades similares, pero que en julio los recursos estan menos disponibles y por lo tanto los cormoranes viajan mas lejos. 
+Todo el material en:
 
---
+ [Presentación](https://github.com/MiriamLL/Curso_Cormoranes)  
+ [Código](https://github.com/MiriamLL/Curso_Cormoranes/blob/main/CormoranesGrupo6.Rmd)  
 
-- Aunque este es un estudio preliminar, conocer si hay diferencias entre sexos en las areas y profundidades que utilizan para alimentarse nos ayuda a mejorar medidas de proteccion de la especie.
-
---
-
-- Por ahora la pesca parece afectar el comportamiento de los cormoranes ya sea por competencia directa o por que reducen la disponibilidad de presas.
-
-- En algunas especies esto puede afectar su exito reproductivo, pero esto queda para estudios futuros.
-
----
-
-class: center, middle
-
-## Todo el material en
-
-https://github.com/MiriamLL/Curso_Cormoranes
-
-## Gracias 
-
-```{r echo=FALSE, out.height=200, out.width= 300}
-knitr::include_graphics("https://scontent.fham2-1.fna.fbcdn.net/v/t1.0-9/125369794_1017592122068396_8216067479374620034_o.png?_nc_cat=107&ccb=2&_nc_sid=09cbfe&_nc_ohc=Zs_v8fI_zW8AX-BDdkX&_nc_ht=scontent.fham2-1.fna&oh=a34c8fc4c28cc3d838702576ed65b1a0&oe=6033C883")
+Gracias  
+```{r echo=FALSE, out.height=200}
+knitr::include_graphics("https://pbs.twimg.com/profile_images/1328209744247525377/vlR2bO3p_400x400.jpg")
 ```
-!
+  
+`r emo::ji("smile")`!
 
 
-`r emo::ji("smile")`
 

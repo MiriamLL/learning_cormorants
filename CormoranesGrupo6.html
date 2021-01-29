@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="author" content="Alonso Huyhua, Carolina Meza y Miriam Lerma" />
     <link href="CormoranesGrupo6_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="CormoranesGrupo6_files/remark-css-0.0.1/chocolate-fonts.css" rel="stylesheet" />
+    <link href="CormoranesGrupo6_files/remark-css-0.0.1/tamu-fonts.css" rel="stylesheet" />
   </head>
   <body>
     <textarea id="source">
@@ -30,9 +30,9 @@ class: center, middle
 
 ## 1. Antecedentes
 
-Los guanay ***(Phalacrocorax bougainvillii)*** se alimentan principalmente de anchoveta ***(Engraulis rigens)***
+Los guanayes ***(Phalacrocorax bougainvillii)*** se alimentan principalmente de anchoveta ***(Engraulis rigens)***
 
-&lt;img src="https://tumi.lamolina.edu.pe/infopes/wp-content/uploads/2018/06/anchoveta.jpg" width="200" height="100" /&gt;
+&lt;img src="https://tumi.lamolina.edu.pe/infopes/wp-content/uploads/2018/06/anchoveta.jpg" height="100" /&gt;
 
 En Perú, la temporada de pesca coincide con la temporada de reproducción de los guanays.
 
@@ -72,10 +72,6 @@ Los datos se tomaron en la Isla Lobos de Afuera en Perú.
 
 
 
-
-
-
-
 &lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotAreadeEstudio.jpg" width="250" height="400" /&gt;
 
 ---
@@ -94,7 +90,7 @@ class: center, middle
 ## 4. Metodología
 ### 4.1.1. Importar excels
 
-Con que tengan una carpeta con los excels del curso.
+Deben tener carpeta con los excels del curso.
 
 Usando estos paquetes:
 
@@ -134,29 +130,14 @@ Renombrar para más rápido
 Tracks&lt;-TracksCormoranes
 ```
 
-Queda así
 
-```r
-str(Tracks)
-```
 
-```
-tibble [1,185,421 x 9] (S3: tbl_df/tbl/data.frame)
- $ TagID      : chr [1:1185421] "AD01" "AD01" "AD01" "AD01" ...
- $ Date       : POSIXct[1:1185421], format: "2017-04-01" "2017-04-01" ...
- $ Time       : POSIXct[1:1185421], format: "1899-12-31 13:28:15" "1899-12-31 13:38:06" ...
- $ Depth      : num [1:1185421] 0 0 0 0 0 0 0 0 0 0 ...
- $ Temperature: num [1:1185421] 23.3 28.2 28.2 28.2 28.2 28.2 28.1 28.1 28.1 28.1 ...
- $ Latitude   : num [1:1185421] -6.95 -6.95 -6.95 -6.95 -6.95 ...
- $ Longitude  : num [1:1185421] -80.7 -80.7 -80.7 -80.7 -80.7 ...
- $ Height     : num [1:1185421] NA 42 26 20 24 20 20 22 22 22 ...
- $ Speed      : num [1:1185421] NA 33.3 33.3 33.3 33.3 33.3 33.3 37 33.3 33.3 ...
-```
+
 
 ---
 
 ## 4. Metodología
-### 4.2.1. Parametros del viaje
+### 4.2.1. Parámetros del viaje
 Máximos de buceo 
 
 ```r
@@ -171,31 +152,10 @@ ProfundidadBuceos&lt;-Tracks %&gt;%
    summarise_at(c("Depth"), max, na.rm = TRUE) 
 ```
 
-Queda así
-
-```r
-head(ProfundidadBuceos,8)
-```
-
-```
-## # A tibble: 8 x 2
-##   TagID Depth
-##   &lt;chr&gt; &lt;dbl&gt;
-## 1 AD01  5.67 
-## 2 AD02  0    
-## 3 AD03  5.87 
-## 4 AD04  0.280
-## 5 AD05  8.83 
-## 6 AD06  0    
-## 7 AD07  9.26 
-## 8 AD08  9.58
-```
-
-
 ---
 
 ## 4. Metodología
-### 4.2.2. Parametros del viaje
+### 4.2.2. Parámetros del viaje
 Distancias máximas
 
 Paquetes
@@ -226,71 +186,31 @@ LaColonia&lt;- SpatialPoints(cbind(MiColonia$Longitude,MiColonia$Latitude))
 ---
 
 ## 4. Metodología
-### 4.2.2. Parametros del viaje
+### 4.2.2. Parámetros del viaje
 Distancias máximas
 
-Calculamos distancia en metros y transformamos a kilometros
+Calculamos distancia en metros y transformamos a kilómetros
 
 ```r
 Metros&lt;-(distm(TracksSp,MiColonia,fun = distHaversine))
 TracksDist&lt;-cbind(Tracks,Metros)
 TracksDist$Km&lt;-TracksDist$Metros/1000
 ```
+Nuestra metodología para esta parte no fue la más rápida 🕰.
 
-
-```r
-head(TracksDist)
-```
-
-```
-##   TagID       Date                Time Depth Temperature Latitude Longitude
-## 1  AD01 2017-04-01 1899-12-31 13:28:15     0        23.3 -6.94793 -80.72884
-## 2  AD01 2017-04-01 1899-12-31 13:38:06     0        28.2 -6.94793 -80.72884
-## 3  AD01 2017-04-01 1899-12-31 13:38:07     0        28.2 -6.94798 -80.72881
-## 4  AD01 2017-04-01 1899-12-31 13:38:08     0        28.2 -6.94806 -80.72876
-## 5  AD01 2017-04-01 1899-12-31 13:38:09     0        28.2 -6.94813 -80.72870
-## 6  AD01 2017-04-01 1899-12-31 13:38:10     0        28.2 -6.94821 -80.72864
-##   Height Speed    Metros          Km
-## 1     NA    NA  0.000000 0.000000000
-## 2     42  33.3  0.000000 0.000000000
-## 3     26  33.3  6.478402 0.006478402
-## 4     20  33.3 16.957999 0.016957999
-## 5     24  33.3 27.111081 0.027111081
-## 6     20  33.3 38.209457 0.038209457
-```
 
 ---
 
 ## 4. Metodología
-### 4.2.2. Parametros del viaje
+### 4.2.2. Parámetros del viaje
 Distancias máximas
 
-Calcular la distancia maxima de cada individuo
+Calcular la distancia máxima de cada individuo
 
 ```r
 DistanciaColonia&lt;-TracksDist %&gt;%
   group_by(TagID) %&gt;%
    summarise_at(c("Km"), max, na.rm = TRUE) 
-```
-
-Queda así
-
-```r
-head(DistanciaColonia,8)
-```
-
-```
-## # A tibble: 8 x 2
-##   TagID    Km
-##   &lt;chr&gt; &lt;dbl&gt;
-## 1 AD01   20.9
-## 2 AD02   18.5
-## 3 AD03   18.3
-## 4 AD04   14.7
-## 5 AD05   23.0
-## 6 AD06   19.2
-## 7 AD07   18.0
-## 8 AD08   17.3
 ```
 
 ---
@@ -312,25 +232,6 @@ TablaDistancias&lt;-left_join(Medidas,DistanciaColonia,by='TagID')
 TablaCompleta&lt;-left_join(TablaDistancias,ProfundidadBuceos,by='TagID')
 ```
 
-Tabla completa
-
-```r
-head(TablaCompleta)
-```
-
-```
-## # A tibble: 6 x 8
-##   TagID  Year Month Sex   Weight  Wing    Km Depth
-##   &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 AD01   2017 Apr   M      2399.  35    20.9 5.67 
-## 2 AD02   2017 Apr   M      2392.  35.2  18.5 0    
-## 3 AD03   2017 Apr   F      2450.  35.5  18.3 5.87 
-## 4 AD04   2017 Apr   F      2609.  34.8  14.7 0.280
-## 5 AD05   2017 Apr   F      2664   36    23.0 8.83 
-## 6 AD06   2017 Apr   M      2278.  34.6  19.2 0
-```
-
-
 ---
 
 ## 4. Metodología
@@ -344,28 +245,17 @@ TablaCompleta %&gt;%
   summarise_at(c("Depth"), funs(mean, sd), na.rm = TRUE) 
 ```
 
-```
-## # A tibble: 4 x 4
-## # Groups:   Sex [2]
-##   Sex   Month  mean    sd
-##   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 F     Apr    6.21  3.66
-## 2 F     Jul   27.5   5.87
-## 3 M     Apr    5.06  4.93
-## 4 M     Jul   21.6   4.07
-```
-
 ---
 
 ## 4. Metodología
-### 4.4.1. Promedios 
+### 4.4.1. Figura
 Máximos de buceo
 
 Código para figura
 
 ```r
 PlotBuceos&lt;-ggplot(TablaCompleta, aes(x=Month, y=Depth,fill=Sex))+
-  xlab("Temporada de pesca")+ylab("Profundidad de buceo maxima \n (m)")+
+  xlab("Temporada de pesca")+ylab("Profundidad de buceo máxima \n (m)")+
   geom_boxplot()+
     scale_fill_manual(values=c("#f4a261","#2a9d8f","#f4a261","#2a9d8f")) +
   theme_classic()+
@@ -382,10 +272,9 @@ PlotBuceos&lt;-ggplot(TablaCompleta, aes(x=Month, y=Depth,fill=Sex))+
 ---
 
 ## 4. Metodología
-### 4.4.1. Promedios 
+### 4.4.1. Figura
 Máximos de buceo
 
-Figura preliminar
 
 
 &lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotBuceos.jpg" width="500" height="300" /&gt;
@@ -403,21 +292,10 @@ TablaCompleta %&gt;%
   summarise_at(c("Km"), funs(mean, sd), na.rm = TRUE) 
 ```
 
-```
-# A tibble: 4 x 4
-# Groups:   Sex [2]
-  Sex   Month  mean    sd
-  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
-1 F     Apr    17.4  3.66
-2 F     Jul    34.8 14.8 
-3 M     Apr    20.6  3.39
-4 M     Jul    57.2 21.4 
-```
-
 ---
 
 ## 4. Metodología
-### 4.4.2. Promedios 
+### 4.4.2. Figura
 Distancias máximas
 
 Código figura
@@ -442,10 +320,9 @@ PlotDistancias&lt;-ggplot(TablaCompleta, aes(x=Month, y=Km,fill=Sex))+
 ---
 
 ## 4. Metodología
-### 4.4.2. Promedios 
+### 4.4.2. Figura
 Distancias máximas
 
-Figura preliminar: distancias
 
 
 &lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotDistancias.jpg" width="500" height="300" /&gt;
@@ -464,7 +341,7 @@ Ploteame&lt;-function(Datos=Datos){
     geom_sf(data = world) +
     coord_sf(xlim = c(-81, -80), ylim = c(-7.5, -6.5), expand = FALSE)+
     geom_path(data = Datos, aes(x = Longitude, y = Latitude, color=TagID), size=1)+
-  theme_bw()+
+    theme_bw()+
     theme(panel.border = element_rect(linetype = "solid", colour = "black", size=1.5),
         axis.title = element_text(size=8),axis.ticks.length = unit(3, "pt"),
         axis.text.x =  element_text(size=8),axis.text.y =  element_text(size=8),
@@ -475,7 +352,7 @@ Ploteame&lt;-function(Datos=Datos){
         legend.position='top') + 
    labs(x = "Longitude", y="Latitude")+
    geom_point(data = MiColonia, mapping = aes(x = Longitude, y = Latitude), 
-             color = "black", fill="white", size = 10,shape=21,stroke = 3)
+             color = "black", fill="white", size = 2,shape=21,stroke = 3)
   return(MiPlot)
 }
 ```
@@ -483,8 +360,7 @@ Ploteame&lt;-function(Datos=Datos){
 ---
 
 ## 4. Metodología
-### 4.4.2. Promedios 
-Crear un mapa por sexo y mes
+### 4.4.2. Mapa por sexo y mes
 
 Agregar medidas a Tracks
 
@@ -544,62 +420,46 @@ MapasSexoVeda&lt;-plot_grid(MapaA,MapaB,
 ---
 
 ## 4. Metodología
-### 4.4.2. Promedios 
+### 4.4.2. Tracks por individuos  
 
-Tracks por individuos  
-
-&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/MapasSexoVeda.jpg" width="500" height="400" /&gt;
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/MapasSexoVeda.jpg" height="400" /&gt;
 
 
 ---
 
 ## 4. Metodología
-### 4.5.1. Estadisticos
+### 4.5.1. Estadísticos
 
-- De acuerdo a nuestros objetivos lo mejor es usar una ANOVA de dos vías. 
-- Para evaluar el efecto de dos factores (Sexo y Temporada de pesca) en una variable de respuesta (maximo de buceos y distancia maxima de los viajes, respectivamente). 
-
-
+- ANOVA de dos vías. 
+- Para evaluar el efecto de dos factores (Sexo y Temporada de pesca) en una variable de respuesta (máximo de buceos y distancia máxima de los viajes, respectivamente). 
 
 
 
-Nota: ***Son solo máximos, no hicimos correccion de ceros ni calculamos parametros por viaje por individuo***
+
+
+Nota: ***Son solo máximos, no hicimos corrección de ceros ni calculamos parámetros por viaje por individuo***
 
 ---
 
 ## 4. Metodología
-### 4.5.1. Estadisticos
+### 4.5.1. Estadísticos
 
 Máximos de buceo
 
-Modelo
 
 ```r
 ModeloBuceos&lt;-aov(Depth~Sex+Month+Sex:Month, data=TablaCompleta)
 summary(ModeloBuceos)
 ```
 
-```
-            Df Sum Sq Mean Sq F value   Pr(&gt;F)    
-Sex          1   26.1    26.1   1.223    0.286    
-Month        1 1659.9  1659.9  77.646 2.57e-07 ***
-Sex:Month    1   26.5    26.5   1.239    0.283    
-Residuals   15  320.7    21.4                     
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-1 observation deleted due to missingness
-```
-
---
-
-La **temporada de pesca** es significativo, independientemente del **sexo**.
+**No** hubo diferencias significativas en los buceos entre **hembras y machos** (ANOVA F1,15=1.22, p = 0.29), pero **ambos sexos bucearon más profundo en Julio**, durante la temporada de pesca (ANOVA F1,15=77.65, p &lt; 0.01). La interaccion entre los factores sexo y temporada de pesca no fue significativa (F1,15=1.24, p = 0.28). 
 
 ---
 
 ## 4. Metodología
-### 4.5.1. Estadisticos
+### 4.5.1. Estadísticos
 
-Se cumplen los supuestos
+Se cumplieron los supuestos
 
 
 
@@ -609,13 +469,6 @@ Se cumplen los supuestos
 leveneTest(Depth~Sex:Month, data=TablaCompleta)
 ```
 
-```
-Levene's Test for Homogeneity of Variance (center = median)
-      Df F value Pr(&gt;F)
-group  3  0.4533 0.7188
-      15               
-```
-
 - Normalidad de los residuales
 
 ```r
@@ -623,49 +476,28 @@ aov_residuals &lt;- residuals(object = ModeloBuceos)
 shapiro.test(x = aov_residuals )
 ```
 
-```
-
-	Shapiro-Wilk normality test
-
-data:  aov_residuals
-W = 0.93973, p-value = 0.2607
-```
-
 
 
 ---
 
 ## 4. Metodología
-### 4.5.1. Estadisticos
+### 4.5.1. Estadísticos
 Distancias máximas
 
-Para las distancias lo transformamos a escala logaritmica para mejorar la normalidad de los residuales. 
+Para las distancias lo transformamos a escala logarítmica para mejorar la normalidad de los residuales. 
 
 ```r
 modeloKm&lt;-aov(formula=log(Km)~Sex*Month,data=TablaCompleta)
 summary(modeloKm)
 ```
 
-```
-            Df Sum Sq Mean Sq F value   Pr(&gt;F)    
-Sex          1  0.700   0.700   8.199   0.0118 *  
-Month        1  3.182   3.182  37.295 2.01e-05 ***
-Sex:Month    1  0.142   0.142   1.663   0.2167    
-Residuals   15  1.280   0.085                     
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-1 observation deleted due to missingness
-```
-
---
-
-La **temporada de pesca** es significativo y **sexo** tambien, pero no hay interacción entre ambos.
+En las distancia máximas de la colonia, la interaccion sexo y temporada de pesca no fue significativo (ANOVA F1,15=1.66, p = 0.21). Pero **los machos viajan significativamente más lejos de la colonia que las hembras** (ANOVA F1,15=8.19 p = 0.01), y **ambos sexos viajan más lejos en Julio** (ANOVA F1,15=27.29, p &lt; 0.01), durante la temporada de pesca.
 
 
 ---
 
-## 4. Metodologia
-### 4.5.1. Estadisticos
+## 4. Metodología
+### 4.5.1. Estadísticos
 
 Se cumplen los supuestos
 
@@ -675,13 +507,6 @@ Se cumplen los supuestos
 leveneTest(log(Km)~Sex:Month, data=TablaCompleta)
 ```
 
-```
-Levene's Test for Homogeneity of Variance (center = median)
-      Df F value Pr(&gt;F)
-group  3  2.3255 0.1161
-      15               
-```
-
 - Normalidad de los residuales
 
 ```r
@@ -689,61 +514,25 @@ aov_residuals &lt;- residuals(object = modeloKm)
 shapiro.test(x = aov_residuals)
 ```
 
-```
-
-	Shapiro-Wilk normality test
-
-data:  aov_residuals
-W = 0.95438, p-value = 0.4674
-```
-
 ---
 
 ---
 
 ## 5. Discusión
-### 5.1. Máximos de buceo
+### Parámetros del viaje
 
-Estos analisis preliminares sugieren que **no** hay diferencias significativas entre hembras y machos en las profundidades de buceo pero **si hay diferencias** entre antes y durante la temporada de pesca.   
+- Por un lado:  
+Un efecto del sexo, donde los machos viajan en general **más lejos**, pero no más profundo que las hembras. Ya sea por que consumen diferentes presas, por competencia entre sexos, o por diferentes roles durante la reproducción.  
 
-Ambos sexos bucean **mas profundo** durante la temporada de pesca.  
-
-
-&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/PlotBuceos.jpg" width="400" height="300" /&gt;
-
----
-
-## 5. Discusión
-### 5.1. Máximos de buceo
-
-Lo cual apuntaria a:  
+- Por el otro lado:  
+Los guanay viajando **más lejos** y buceando **más profundo** en julio (durante la temporada de pesca) en comparacion con Abril (antes de la temporada de pesca) sugiere:  
 a) Cambio en la dieta.  
-b) Cambio en las condiciones ambientales, que obliga a los cormoranes a bucear mas profundo.   
-c) Un efecto de la temporada de pesca, tal vez un decremento en la disponibilidad de alimento cuando entran en competencia con las pesquerias, que obliga a los cormoranes a bucear mas profundo.  
+b) Cambio en las condiciones ambientales.  
+c) Un efecto de la temporada de pesca
 
----
-
-
-## 5. Discusión
-### 5.1. Distancias máximas
-
-Estos analisis preliminares sugieren que **si** hay diferencias significativas en lasdistancias maximas que viajan entre hembras y machos, y entre durante y despues de la veda.  
-
-Los machos viajan **mas lejos** que las hembras, y ambos viajan mas lejos en julio.
-
-&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/MapasSexoVeda.jpg" width="400" height="300" /&gt;
-
----
-
-## 5. Discusión
-### 5.1. Distancias máximas
-
-Lo cual sugiere que hay:  
-Un efecto del sexo, donde los machos viajan en general mas lejos que las hembras, por que consumen diferentes presas, por competencia entre sexos, o por diferentes roles durante la reproduccion.  
-
-a) Cambio en la dieta, por especies que se encuentran mas lejos de la colonia.  
-b) Cambio en las condiciones ambientales que afecten la disponibilidad de presas entre abril y julio, que obliga a los cormoranes a viajar mas lejos.  
-c) Un efecto de la temporada de pesca, tal vez un decremento en la disponibilidad de alimento que obliga a los cormoranes a viajar mas lejos.
+🐟
+🐟
+🐟
 
 
 ---
@@ -751,11 +540,11 @@ c) Un efecto de la temporada de pesca, tal vez un decremento en la disponibilida
 ## 5. Discusión
 ### 5.2. Antes de la temporada de pesca
 
-Datos de Global Fishing Watch para el area general donde se encuentra la colonia para el mes de **abril** (antes de la temporada de pesca)
+Datos de Global Fishing Watch para el área general donde se encuentra la colonia para el mes de **abril** (antes de la temporada de pesca)
 
-&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/GFW1.jpeg" width="500" height="250" /&gt;
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/GFW1.jpeg" height="200" /&gt;
 
-Coincide en el tiempo en que los buceos son **menos** profundos, y los viajes de los cormoranes **más cortos**.
+Coincide en el tiempo en que los buceos son **menos** profundos, y los viajes de los guanayes **más cortos**.
 
 ---
 
@@ -764,59 +553,43 @@ Coincide en el tiempo en que los buceos son **menos** profundos, y los viajes de
 
 Datos de Global Fishing Watch para el area general donde se encuentra la colonia para el mes de **julio** (durante de la temporada de pesca)
 
-&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/GFW2.jpeg" width="500" height="250" /&gt;
+&lt;img src="https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/GFW2.jpeg" height="200" /&gt;
 
-Coincide en el tiempo en que los buceos son **más profundos**, y los viajes de los cormoranes **más largos**.
+Coincide en el tiempo en que los buceos son **más profundos**, y los viajes de los guanayes **más largos**.
 
 --
 
-Es claro que el esfuerzo de pesca es mayor en Julio, y por lo tanto una razon potencial que puede explicar el cambio en el comportamiento de los cormoranes. 
+Es claro que el esfuerzo de pesca es mayor en Julio, y por lo tanto una razón potencial que puede explicar el cambio en el comportamiento de los guanayes. 
 
 ---
 
 # 6. Conclusiones
 
-Encontramos que:
+Con este estudio **preliminar** encontramos que:
 
-
-- No existen diferencias entre hembras y machos en las profundidades maximas del buceo, pero ambos sexos bucean mas profundo durante la temporada de pesca.
+- Hembras y machos se alimentan en diferentes áreas, pero a profundidades similares.
 
 --
 
-- Hay diferencias las distancias de la colonia, los machos viajan mas lejos que las hembras antes y durante la temporada de pesca y ambos sexos viajan mayores distancias durante la temporada de pesca. 
+- Queda para el futuro investigar si las diferencias antes y durante la pesca se deben a algún cambio en las condiciones ambientales que disminuye el recurso y obliga a los guanayes a viajar más lejos y más profundo o si existen cambios en la dieta.  
+- No obstante, este estudio preliminar sugiere que hay un efecto de la pesca en el comportamiento de los guanayes.
 
-
+🐟
+🐟
+🐟
 ---
 
-# 6. Conclusiones
+class: inverse, center, middle
 
-- Esto sugiere que los sexos se alimentan en diferentes areas, pero a profundidades similares, pero que en julio los recursos estan menos disponibles y por lo tanto los cormoranes viajan mas lejos. 
+Todo el material en:
 
---
+ [Presentación](https://github.com/MiriamLL/Curso_Cormoranes)  
+ [Código](https://github.com/MiriamLL/Curso_Cormoranes/blob/main/CormoranesGrupo6.Rmd)  
 
-- Aunque este es un estudio preliminar, conocer si hay diferencias entre sexos en las areas y profundidades que utilizan para alimentarse nos ayuda a mejorar medidas de proteccion de la especie.
-
---
-
-- Por ahora la pesca parece afectar el comportamiento de los cormoranes ya sea por competencia directa o por que reducen la disponibilidad de presas.
-
-- En algunas especies esto puede afectar su exito reproductivo, pero esto queda para estudios futuros.
-
----
-
-class: center, middle
-
-## Todo el material en
-
-https://github.com/MiriamLL/Curso_Cormoranes
-
-## Gracias 
-
-&lt;img src="https://scontent.fham2-1.fna.fbcdn.net/v/t1.0-9/125369794_1017592122068396_8216067479374620034_o.png?_nc_cat=107&amp;ccb=2&amp;_nc_sid=09cbfe&amp;_nc_ohc=Zs_v8fI_zW8AX-BDdkX&amp;_nc_ht=scontent.fham2-1.fna&amp;oh=a34c8fc4c28cc3d838702576ed65b1a0&amp;oe=6033C883" width="300" height="200" /&gt;
-!
-
-
-😄
+Gracias  
+&lt;img src="https://pbs.twimg.com/profile_images/1328209744247525377/vlR2bO3p_400x400.jpg" height="200" /&gt;
+  
+😄!
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
