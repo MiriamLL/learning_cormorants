@@ -25,13 +25,14 @@ class: center, middle
 
 ## 1. Antecedentes
 
-Los guanayes ***(Phalacrocorax bougainvillii)*** se alimentan principalmente de anchoveta ***(Engraulis rigens)***
+- Los guanayes ***(Phalacrocorax bougainvillii)*** son considerados una de las especies de aves marinas más importante para la producción del guano en el Perú.  
+-Esta especie se alimenta principalmente de anchoveta ***(Engraulis rigens)***, el cual es muy valorado para la pesca en el Perú por la gran cantidad de exportación.
+-  Por lo que creemos que la temporada de pesca de anchoveta puede impactar su comportamiento alimenticio. 
+- Si hay menos recursos porque los captura la pesca o porque hacen que sea más complicado para las aves obtener su alimento.
 
 ```{r echo=FALSE, out.height=100}
 knitr::include_graphics("https://tumi.lamolina.edu.pe/infopes/wp-content/uploads/2018/06/anchoveta.jpg")
 ```
-
-En Perú, la temporada de pesca coincide con la temporada de reproducción de los guanays.
 
 ---
 
@@ -40,8 +41,9 @@ class: center, middle
 ## 2. Justificación
 
 
-- Conocer si hay diferencias entre sexos en las áreas y profundidades que utilizan para alimentarse nos ayuda a mejorar medidas de protección de la especie.
-- Así como tener información de que sexo puede ser más vulnerable a la temporada de pesca.
+- Conocer las diferencias que existen por sexos en las distancias recorridas y profundidades de buceo que realizan para alimentarse 
+- Esta información nos puede ayudar a mejorar las medidas de protección de la especie a corto y largo plazo. 
+-Así como tener información de que sexo puede ser más vulnerable a la temporada de pesca y como esta practica puede afectar al forrageo de la colonia ubicada en la isla Lobos de Afuera.
 
 `r emo::ji("fish")`
 
@@ -62,10 +64,8 @@ class: center
 
 ## 4. Metodología
 
-Se tomaron muestras de hembras y machos de guanay (n=20), antes (Abril) y durante (Julio) la temporada de pesca de anchoveta.
 
-
-Los datos se tomaron en la Isla Lobos de Afuera en Perú.
+Recolectamos datos de guanay durante la temporada reproductiva en Isla Lobos de Afuera en Perú. Estos guanayes (n=20) se muestrearon: antes de la pesca (Apr) y durante la pesca (Jul).
 
 ```{r Paquetes2, warning=FALSE, message=FALSE, echo=FALSE, eval= FALSE}
 #Paquetes
@@ -349,7 +349,7 @@ knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_Cormor
 ---
 
 ## 4. Metodología
-### 4.4.2. Promedios 
+### 4.4.2. Figuras
 Distancias máximas
 
 Función para crear mapas
@@ -538,7 +538,7 @@ shapiro.test(x = aov_residuals)
 ### Parámetros del viaje
 
 - Por un lado:  
-Un efecto del sexo, donde los machos viajan en general **más lejos**, pero no más profundo que las hembras. Ya sea por que consumen diferentes presas, por competencia entre sexos, o por diferentes roles durante la reproducción.  
+Un efecto del sexo, donde los machos viajan **más lejos**, pero no más profundo que las hembras. Ya sea por que consumen diferentes presas, por competencia entre sexos, o por diferentes roles durante la reproducción.  
 
 - Por el otro lado:  
 Los guanay viajando **más lejos** y buceando **más profundo** en julio (durante la temporada de pesca) en comparacion con Abril (antes de la temporada de pesca) sugiere:  
@@ -558,9 +558,10 @@ c) Un efecto de la temporada de pesca
 
 Datos de Global Fishing Watch para el área general donde se encuentra la colonia para el mes de **abril** (antes de la temporada de pesca)
 
-```{r, echo=FALSE, out.height=200}
+```{r, echo=FALSE, out.height=250}
 knitr::include_graphics('https://raw.githubusercontent.com/MiriamLL/Curso_Cormoranes/main/GFW1.jpeg')
 ```
+
 
 Coincide en el tiempo en que los buceos son **menos** profundos, y los viajes de los guanayes **más cortos**.
 
@@ -587,7 +588,7 @@ Es claro que el esfuerzo de pesca es mayor en Julio, y por lo tanto una razón p
 
 Con este estudio **preliminar** encontramos que:
 
-- Hembras y machos se alimentan en diferentes áreas, pero a profundidades similares.
+- Machos viajan más lejos que las hembras, pero a profundidades similares.
 
 --
 
