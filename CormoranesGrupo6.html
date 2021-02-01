@@ -32,7 +32,7 @@ class: center, middle
 
 - Los guanayes ***(Phalacrocorax bougainvillii)*** son considerados una de las especies de aves marinas más importante para la producción del guano en el Perú.  
 - Esta especie se alimenta principalmente de anchoveta ***(Engraulis rigens)***, el cual es muy valorado para la pesca en el Perú por la gran cantidad de exportación.
--  Por lo que creemos que la temporada de pesca de anchoveta puede impactar su comportamiento alimenticio. 
+-  La temporada de pesca de anchoveta puede impactar su comportamiento alimenticio. 
 - Si hay menos recursos porque los captura la pesca o porque hacen que sea más complicado para las aves obtener su alimento.
 
 &lt;img src="https://tumi.lamolina.edu.pe/infopes/wp-content/uploads/2018/06/anchoveta.jpg" height="100" /&gt;
@@ -44,9 +44,9 @@ class: center, middle
 ## 2. Justificación
 
 
-- Conocer las diferencias que existen por sexos en las distancias recorridas y profundidades de buceo que realizan para alimentarse 
+- Conocer las diferencias que **existen por sexos** y la **temporada de pesca** en las distancias recorridas y profundidades de buceo que realizan para alimentarse. 
 - Esta información nos puede ayudar a mejorar las medidas de protección de la especie a corto y largo plazo. 
-- Así como tener información de que sexo puede ser más vulnerable a la temporada de pesca y como esta practica puede afectar al forrageo de la colonia ubicada en la isla Lobos de Afuera.
+- Así como tener información de que sexo puede ser más vulnerable a la temporada de pesca y como esta práctica puede afectar al comportamiento de alimenación de la colonia ubicada en la isla Lobos de Afuera.
 
 🐟
 
@@ -59,7 +59,7 @@ Evaluar:
 
 --
 
-- Si los guanay bucean más profundo o viajan más lejos en Julio (cuando está abierta la pesca) comparado con Abril (antes de que se abra la temporada).
+- Si los guanayes bucean más profundo o viajan más lejos en **Julio** (cuando está abierta la pesca) comparado con **Abril** (antes de que se abra la temporada).
 
 ---
 
@@ -196,7 +196,7 @@ Metros&lt;-(distm(TracksSp,MiColonia,fun = distHaversine))
 TracksDist&lt;-cbind(Tracks,Metros)
 TracksDist$Km&lt;-TracksDist$Metros/1000
 ```
-Nuestra metodología para esta parte no fue la más rápida 🕘.
+Nuestra metodología para esta parte no fue la más rápida 🕤.
 
 
 ---
@@ -452,7 +452,7 @@ ModeloBuceos&lt;-aov(Depth~Sex+Month+Sex:Month, data=TablaCompleta)
 summary(ModeloBuceos)
 ```
 
-**No** hubo diferencias significativas en los buceos entre **hembras y machos** (ANOVA F1,15=1.22, p = 0.29), pero **ambos sexos bucearon más profundo en Julio**, durante la temporada de pesca (ANOVA F1,15=77.65, p &lt; 0.01). La interaccion entre los factores sexo y temporada de pesca no fue significativa (F1,15=1.24, p = 0.28). 
+**No** hubo diferencias significativas en los buceos entre **hembras y machos** (ANOVA F1,15=1.22, p = 0.29), pero **ambos sexos bucearon más profundo en Julio**, durante la temporada de pesca (ANOVA F1,15=77.65, p &lt; 0.01). La interacción entre los factores sexo y temporada de pesca no fue significativa (F1,15=1.24, p = 0.28). 
 
 ---
 
@@ -491,7 +491,7 @@ modeloKm&lt;-aov(formula=log(Km)~Sex*Month,data=TablaCompleta)
 summary(modeloKm)
 ```
 
-En las distancia máximas de la colonia, la interaccion sexo y temporada de pesca no fue significativo (ANOVA F1,15=1.66, p = 0.21). Pero **los machos viajan significativamente más lejos de la colonia que las hembras** (ANOVA F1,15=8.19 p = 0.01), y **ambos sexos viajan más lejos en Julio** (ANOVA F1,15=27.29, p &lt; 0.01), durante la temporada de pesca.
+En las distancia máximas de la colonia, la interacción sexo y temporada de pesca no fue significativa (ANOVA F1,15=1.66, p = 0.21). Pero **los machos viajan significativamente más lejos de la colonia que las hembras** (ANOVA F1,15=8.19 p = 0.01), y **ambos sexos viajan más lejos en Julio** (ANOVA F1,15=27.29, p &lt; 0.01), durante la temporada de pesca.
 
 
 ---
@@ -525,7 +525,7 @@ shapiro.test(x = aov_residuals)
 Un efecto del sexo, donde los machos viajan **más lejos**, pero no más profundo que las hembras. Ya sea por que consumen diferentes presas, por competencia entre sexos, o por diferentes roles durante la reproducción.  
 
 - Por el otro lado:  
-Los guanay viajando **más lejos** y buceando **más profundo** en julio (durante la temporada de pesca) en comparacion con Abril (antes de la temporada de pesca) sugiere:  
+Los guanay viajando **más lejos** y buceando **más profundo** en Julio (durante la temporada de pesca) en comparacion con Abril (antes de la temporada de pesca) sugiere:  
 a) Cambio en la dieta.  
 b) Cambio en las condiciones ambientales.  
 c) Un efecto de la temporada de pesca
